@@ -46,10 +46,14 @@ parelu = Elu(30) >> Elu(30)
 parchain_negative = Tanh(30) >> Elu(30)
 parchain_zero = Sigmoid(30) >> Relu(30)
 
-parralel_network_one = Input(input_size) >> Linear(30) >> (
+parralel_network_relu_out = Input(input_size) >> Linear(30) >> (
 			parsig | partan | parelu | parchain_negative | parchain_zero) >> Concatenate() >> Tanh(30) >> Relu(1)
 
-networks = [sequential_net_one,parralel_network_one]
+parralel_network_sig_out = Input(input_size) >> Linear(30) >> (
+			parsig | partan | parelu | parchain_negative | parchain_zero) >> Concatenate() >> Tanh(30) >> Sigmoid(1)
+
+networks = [sequential_net_one,parralel_network_relu_out, parralel_network_sig_out]
+
 network = networks[1]
 
 optimizer = algorithms.Adam(
