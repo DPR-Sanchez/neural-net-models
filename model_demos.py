@@ -46,6 +46,9 @@ parchain_zero = Sigmoid(30) >> Relu(30)
 parralel_network_one = Input(14) >> Linear(30) >> (
 			parsig | partan | parelu | parchain_negative | parchain_zero) >> Concatenate() >> Tanh(30) >> Relu(1)
 
+networks = [sequential_net_one,parralel_network_one]
+network = networks[1]
+
 optimizer = algorithms.Adam(
 	network,
 	loss='binary_crossentropy',
