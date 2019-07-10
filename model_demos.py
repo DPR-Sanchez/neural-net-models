@@ -20,14 +20,17 @@ keras.backend.set_session(sess)
 # Split lines into examples and labels
 examples = training_set[:, :-1]
 labels = training_set[:, -1:]
-input_size = len(examples[1])
+
+#takes size of second dimension which is the features count of the example set
+input_size = np.size(examples,1)
+
 # Divide dataset into training and test (60% training and 40% test)
 training_examples, test_examples, training_labels, test_labels = train_test_split(examples, labels, test_size=0.4)
 training_examples = preprocessing.normalize(training_examples)
 test_examples = preprocessing.normalize(test_examples)
 
 sequential_net_one = join(
-		Input(14),
+		Input(input_size),
 		Linear(30),
 		Sigmoid(30),
 		Relu(30),
@@ -43,7 +46,7 @@ parelu = Elu(30) >> Elu(30)
 parchain_negative = Tanh(30) >> Elu(30)
 parchain_zero = Sigmoid(30) >> Relu(30)
 
-parralel_network_one = Input(14) >> Linear(30) >> (
+parralel_network_one = Input(input_size) >> Linear(30) >> (
 			parsig | partan | parelu | parchain_negative | parchain_zero) >> Concatenate() >> Tanh(30) >> Relu(1)
 
 networks = [sequential_net_one,parralel_network_one]
