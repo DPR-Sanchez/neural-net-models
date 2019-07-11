@@ -46,13 +46,24 @@ parelu = Elu(30) >> Elu(30)
 parchain_negative = Tanh(30) >> Elu(30)
 parchain_zero = Sigmoid(30) >> Relu(30)
 
-parralel_network_relu_out = Input(input_size) >> Linear(30) >> (
-			parsig | partan | parelu | parchain_negative | parchain_zero) >> Concatenate() >> Tanh(30) >> Relu(1)
+parralel_network_relu_out = Input(input_size) >> Linear(30) >> (parsig | partan | parelu | parchain_negative | parchain_zero) >>\
+							Concatenate() >> Tanh(30) >> Relu(1)
 
-parralel_network_sig_out = Input(input_size) >> Linear(30) >> (
-			parsig | partan | parelu | parchain_negative | parchain_zero) >> Concatenate() >> Tanh(30) >> Sigmoid(1)
+parralel_network_sig_out = Input(input_size) >> Linear(30) >> (parsig | partan | parelu | parchain_negative | parchain_zero) >>\
+							Concatenate() >> Tanh(30) >> Sigmoid(1)
 
-networks = [sequential_net_one,parralel_network_relu_out, parralel_network_sig_out]
+parralel_funnel_network_relu_out = Input(input_size) >> Linear(30) >>\
+									(parsig | partan | parelu | parchain_negative | parchain_zero) >>\
+									Concatenate() >>(parsig | partan | parelu)>> Concatenate()>>\
+									(parchain_negative | parchain_zero)>>\
+									Tanh(30) >> Sigmoid(1)
+
+networks = [
+				sequential_net_one,
+				parralel_network_relu_out,
+				parralel_network_sig_out,
+				parralel_funnel_network_relu_out
+			]
 
 network = networks[1]
 
