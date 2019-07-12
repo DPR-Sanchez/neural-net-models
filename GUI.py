@@ -13,6 +13,18 @@ main_menu_layout = [
 						[sg.Button('Exit')]
 					]
 
+general_training_layout = 	[
+								[sg.T(' ')],
+								[sg.T(' ' * 10), sg.Button('Predict'), sg.T(' ' * 30), sg.Text('Label Data for Training:')],
+								[sg.T(' ' * 60), sg.InputCombo(('Loss'), size=(20, 3))],
+								[sg.T(' ' * 60), sg.Button('Add example')],
+								[sg.Text('_' * 80)],
+								[sg.Text('Choose A Folder', size=(35, 1))],
+								[sg.Text('Your Folder', size=(15, 1), auto_size_text=False, justification='right'),
+								 sg.InputText('Default Folder'), sg.FolderBrowse()],
+								[sg.Submit(), sg.Button('Exit')]
+							]
+
 
 deepwatch_layout = [
 	[sg.Text('DeepWatch Interface', size=(30, 1), font=("Helvetica", 25))],
@@ -55,9 +67,21 @@ while not exit_value:
 		while not exit_value:
 			if event is None or event == 'Exit':
 				exit_value = True
+				deepwatch_window.Close()
+			elif event == 'Predict':
+				heros_selected = [hero_index[hero] for hero in [values[x] for x in selection_tuple]]
+	elif event == 'General Training':
+		main_menu_window.Close()
+		general_training_window = sg.Window('Neur - A Net Creation Tool', default_element_size=(40, 1)).Layout(general_training_layout)
+
+		event, values = general_training_window.Read()
+
+		while not exit_value:
+			if event is None or event == 'Exit':
+				exit_value = True
+				general_training_window.Close()
 			elif event == 'Predict':
 				heros_selected = [hero_index[hero] for hero in [values[x] for x in selection_tuple]]
 
 	print(event, values)
 
-deepwatch_window.Close()
