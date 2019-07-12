@@ -46,7 +46,7 @@ deepwatch_layout = [
     [sg.Submit(), sg.Button('Exit')]
 ]
 
-selection_tuple = ()
+selection_tuple = (0, 1, 2, 3, 5, 6)
 hero_index = {character_roster[x]:x for x in range(0,len(character_roster))}
 
 main_menu_window = sg.Window('Neur - A Net Creation Tool', default_element_size=(40, 1)).Layout(main_menu_layout)
@@ -62,26 +62,22 @@ while not exit_value:
 		main_menu_window.Close()
 		deepwatch_window = sg.Window('Neur - A Net Creation Tool', default_element_size=(40, 1)).Layout(deepwatch_layout)
 
-		event, values = deepwatch_window.Read()
-
 		while not exit_value:
+			event, values = deepwatch_window.Read()
 			if event is None or event == 'Exit':
 				exit_value = True
 				deepwatch_window.Close()
 			elif event == 'Predict':
 				heros_selected = [hero_index[hero] for hero in [values[x] for x in selection_tuple]]
+				print(heros_selected)
 	elif event == 'General Training':
 		main_menu_window.Close()
 		general_training_window = sg.Window('Neur - A Net Creation Tool', default_element_size=(40, 1)).Layout(general_training_layout)
 
-		event, values = general_training_window.Read()
-
 		while not exit_value:
+			event, values = general_training_window.Read()
 			if event is None or event == 'Exit':
 				exit_value = True
 				general_training_window.Close()
 			elif event == 'Predict':
-				heros_selected = [hero_index[hero] for hero in [values[x] for x in selection_tuple]]
-
-	print(event, values)
-
+				pass
