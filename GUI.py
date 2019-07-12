@@ -11,7 +11,7 @@ column1 = [[sg.Text('Column 1', background_color='#d3dfda', justification='cente
            [sg.Spin(values=('Spin Box 1', '2', '3'), initial_value='Spin Box 1')],
            [sg.Spin(values=('Spin Box 1', '2', '3'), initial_value='Spin Box 2')],
            [sg.Spin(values=('Spin Box 1', '2', '3'), initial_value='Spin Box 3')]]
-layout = [
+deepwatch_layout = [
     [sg.Text('DeepWatch Interface', size=(30, 1), font=("Helvetica", 25))],
     [sg.Text('Your team\t\tEnemy Team')],
 
@@ -34,12 +34,12 @@ layout = [
 ]
 
 selection_tuple = ()
-hero_index = {character_roster(x):x for x in range(0,len(character_roster))}
+hero_index = {character_roster[x]:x for x in range(0,len(character_roster))}
 
-window = sg.Window('Neur - A Net Creation Tool', default_element_size=(40, 1)).Layout(layout)
+deepwatch_window = sg.Window('Neur - A Net Creation Tool', default_element_size=(40, 1)).Layout(deepwatch_layout)
 
 while True:
-	event, values = window.Read()
+	event, values = deepwatch_window.Read()
 
 	if event is None or event == 'Exit':
 		break
@@ -48,4 +48,4 @@ while True:
 
 	print(event, values)
 
-window.Close()
+deepwatch_window.Close()
