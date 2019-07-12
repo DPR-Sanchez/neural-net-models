@@ -33,5 +33,19 @@ layout = [
     [sg.Submit(), sg.Cancel()]
 ]
 
+selection_tuple = ()
+hero_index = {character_roster(x):x for x in range(0,len(character_roster))}
+
 window = sg.Window('Neur - A Net Creation Tool', default_element_size=(40, 1)).Layout(layout)
-button, values = window.Read()
+
+while True:
+	event, values = window.Read()
+
+	if event is None or event == 'Exit':
+		break
+	elif event == 'Predict':
+		heros_selected = [hero_index[hero] for hero in [values[x] for x in selection_tuple]]
+
+	print(event, values)
+
+window.Close()
