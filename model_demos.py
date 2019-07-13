@@ -54,11 +54,18 @@ parralel_network_relu_out = Input(input_size) >> Linear(30) >> (parsig | partan 
 #model 3
 parralel_network_sig_out = Input(input_size) >> Linear(30) >> (parsig | partan | parelu | parchain_negative | parchain_zero) >>\
 							Concatenate() >> Tanh(30) >> Sigmoid(1)
+
 #model 4
+parsig_two = Sigmoid(30) >> Sigmoid(30)
+partan_two = Tanh(30) >> Tanh(30)
+parelu_two = Elu(30) >> Elu(30)
+parchain_negative_two = Tanh(30) >> Elu(30)
+parchain_zero_two = Sigmoid(30) >> Relu(30)
+
 parralel_funnel_network_relu_out = Input(input_size) >> Linear(30) >>\
 									(parsig | partan | parelu | parchain_negative | parchain_zero) >>\
-									Concatenate() >>(parsig | partan | parelu)>> Concatenate()>>\
-									(parchain_negative | parchain_zero)>>\
+									Concatenate() >>(parsig_two | partan_two | parelu_two)>> Concatenate()>>\
+									(parchain_negative_two | parchain_zero_two)>>\
 									Tanh(30) >> Sigmoid(1)
 
 networks = [
