@@ -3,8 +3,13 @@ import PySimpleGUI as sg
 character_roster = ('Tracer','Bastion','Hanzo','Genji','McCree','Reaper','D.va','Soldier76','DoomFist','Hammond','Rheinhart','Winston',
 					'Baptiste','Brigette','Torjorn','Anna','Mei','Mercy','Lucio','Orisa','Junkrat','Roadhog','Ashe','Moira','Phara',
 					'Sombra','Widow Maker','Symmetra','Zarya','Zenyatta')
+
 level_of_play = ['Bronze','Silver','Gold','Platinum','Diamond','Master','Grand Master']
+
 map = ['Hanamura']
+
+network_models = ('sequential 1', 'par net relu', 'par net sig', 'funnel net')
+
 sg.ChangeLookAndFeel('Black')
 
 main_menu_layout = [
@@ -17,10 +22,12 @@ general_training_layout = 	[
 								[sg.T(' ')],
 								[sg.T(' ' * 10), sg.Button('Predict'), sg.T(' ' * 30), sg.Text('Label Data for Training:')],
 								[sg.T(' ' * 60), sg.InputCombo(('Loss'), size=(20, 3))],
-								[sg.T(' ' * 60), sg.Button('Add example')],
+								[sg.T(' ' * 60), sg.Text('net model:')],
+								[sg.T(' ' * 60), sg.InputCombo(network_models, size=(20, 3))],
+								[sg.T(' ' * 60), sg.Text('uploaded dataset: ')],
 								[sg.Text('_' * 80)],
-								[sg.Text('Choose A Folder', size=(35, 1))],
-								[sg.Text('Your Folder', size=(15, 1), auto_size_text=False, justification='right'),
+								[sg.Text('Choose your desired dataset', size=(35, 1))],
+								[sg.Text('Dataset:', size=(15, 1), auto_size_text=False, justification='right'),
 								 sg.InputText('Default Folder'), sg.FolderBrowse()],
 								[sg.Submit(), sg.Button('Exit')]
 							]
