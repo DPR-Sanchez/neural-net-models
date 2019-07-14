@@ -32,10 +32,10 @@ general_training_layout = 	[
 								[sg.Text('_' * 80)],
 								[sg.Text('Choose your desired dataset', size=(35, 1))],
 								[sg.Text('Dataset:', size=(15, 1), auto_size_text=False, justification='right'),
-								 sg.InputText('Default Folder'), sg.FolderBrowse()],
+								 sg.InputText('Select dataset >>'), sg.FileBrowse()],
 								[sg.Text('Save trained network:', size=(35, 1))],
 								[sg.Text('save location:', size=(15, 1), auto_size_text=False, justification='right'),
-								 sg.InputText('Default Folder'), sg.FolderBrowse()],
+								 sg.InputText('Select save location >>'), sg.FileBrowse()],
 								[sg.Submit(), sg.Button('Save Net'),sg.Button('Exit')]
 							]
 
@@ -56,7 +56,7 @@ deepwatch_layout = [
 	[sg.Text('_'  * 80)],
 	[sg.Text('Choose A Folder', size=(35, 1))],
     [sg.Text('Your Folder', size=(15, 1), auto_size_text=False, justification='right'),
-     sg.InputText('Default Folder'), sg.FolderBrowse()],
+     sg.InputText('Selet file >>'), sg.FileBrowse()],
     [sg.Submit(), sg.Button('Exit')]
 ]
 
