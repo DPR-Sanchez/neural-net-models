@@ -1,4 +1,6 @@
 import PySimpleGUI as sg
+import dill
+import numpy as np
 
 character_roster = ('Tracer','Bastion','Hanzo','Genji','McCree','Reaper','D.va','Soldier76','DoomFist','Hammond','Rheinhart','Winston',
 					'Baptiste','Brigette','Torjorn','Anna','Mei','Mercy','Lucio','Orisa','Junkrat','Roadhog','Ashe','Moira','Phara',
@@ -37,8 +39,8 @@ deepwatch_layout = [
 	[sg.InputCombo(character_roster, size=(20, 3)),sg.InputCombo(character_roster, size=(20, 3))],
 	[sg.T(' ')],
 	[sg.T(' '*10),sg.Button('Predict'),sg.T(' '*30),sg.Text('Label Data for Training:')],
-	[sg.T(' '*60),sg.InputCombo(('Loss'), size=(20, 3))],
-	[sg.T(' '*60),sg.Button('Add example')],
+	[sg.T(' ' * 10), sg.Text('Result:'), sg.T(' '*33),sg.InputCombo(('Loss'), size=(20, 3))],
+	[sg.T(' '*8), sg.Text('', size=(10, 1), font=("Helvetica", 25), key='change'),sg.Button('Add example')],
 	[sg.Text('_'  * 80)],
 	[sg.Text('Choose A Folder', size=(35, 1))],
     [sg.Text('Your Folder', size=(15, 1), auto_size_text=False, justification='right'),
@@ -46,7 +48,7 @@ deepwatch_layout = [
     [sg.Submit(), sg.Button('Exit')]
 ]
 
-selection_tuple = (0, 1, 2, 3, 5, 6)
+selection_tuple = (0, 1, 2, 3, 5, 6, 7, 8, 10, 11, 12, 13)
 hero_index = {character_roster[x]:x for x in range(0,len(character_roster))}
 
 main_menu_window = sg.Window('Neur - A Net Creation Tool', default_element_size=(40, 1)).Layout(main_menu_layout)
@@ -64,12 +66,14 @@ while not exit_value:
 
 		while not exit_value:
 			event, values = deepwatch_window.Read()
+			print(values)
 			if event is None or event == 'Exit':
 				exit_value = True
 				deepwatch_window.Close()
 			elif event == 'Predict':
 				heros_selected = [hero_index[hero] for hero in [values[x] for x in selection_tuple]]
-				print(heros_selected)
+				
+				deepwatch_window.Element('change').Update('Test')
 	elif event == 'General Training':
 		main_menu_window.Close()
 		general_training_window = sg.Window('Neur - A Net Creation Tool', default_element_size=(40, 1)).Layout(general_training_layout)
