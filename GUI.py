@@ -1,15 +1,7 @@
 import PySimpleGUI as sg
 import dill
 import numpy as np
-
-character_roster = ('Tracer','Bastion','Hanzo','Genji','McCree','Reaper','D.va','Soldier76','DoomFist','Hammond','Rheinhart','Winston',
-					'Baptiste','Brigette','Torjorn','Anna','Mei','Mercy','Lucio','Orisa','Junkrat','Roadhog','Ashe','Moira','Phara',
-					'Sombra','Widow Maker','Symmetra','Zarya','Zenyatta')
-
-level_of_play = ['Bronze','Silver','Gold','Platinum','Diamond','Master','Grand Master']
-
-map = ['Hanamura']
-
+		
 network_models = ('sequential 1', 'par net relu', 'par net sig', 'funnel net')
 
 sg.ChangeLookAndFeel('Black')
@@ -40,29 +32,6 @@ general_training_layout = 	[
 							]
 
 
-deepwatch_layout = [
-	[sg.Text('DeepWatch Interface', size=(30, 1), font=("Helvetica", 25))],
-	[sg.Text('Your team\t\tEnemy Team')],
-	[sg.InputCombo(character_roster, size=(20, 3)),sg.InputCombo(character_roster, size=(20, 3)),sg.T(' '  * 10),sg.Text('Map:')],
-	[sg.InputCombo(character_roster, size=(20, 3)),sg.InputCombo(character_roster, size=(20, 3)),sg.T(' '  * 10),sg.InputCombo(map, size=(20, 3))],
-	[sg.InputCombo(character_roster, size=(20, 3)),sg.InputCombo(character_roster, size=(20, 3)),sg.T(' '  * 10),sg.Text('Level of Play:')],
-	[sg.InputCombo(character_roster, size=(20, 3)),sg.InputCombo(character_roster, size=(20, 3)),sg.T(' '  * 10),sg.InputCombo(level_of_play, size=(20, 3))],
-	[sg.InputCombo(character_roster, size=(20, 3)),sg.InputCombo(character_roster, size=(20, 3))],
-	[sg.InputCombo(character_roster, size=(20, 3)),sg.InputCombo(character_roster, size=(20, 3))],
-	[sg.T(' ')],
-	[sg.T(' '*10),sg.Button('Predict'),sg.T(' '*30),sg.Text('Label Data for Training:')],
-	[sg.T(' ' * 10), sg.Text('Result:'), sg.T(' '*33),sg.InputCombo(('Loss'), size=(20, 3))],
-	[sg.T(' '*8), sg.Text('', size=(10, 1), font=("Helvetica", 25), key='change'),sg.Button('Add example')],
-	[sg.Text('_'  * 80)],
-	[sg.Text('Choose A Folder', size=(35, 1))],
-    [sg.Text('Your Folder', size=(15, 1), auto_size_text=False, justification='right'),
-     sg.InputText('Selet file >>'), sg.FileBrowse()],
-    [sg.Submit(), sg.Button('Exit')]
-]
-
-selection_tuple = (0, 1, 2, 3, 5, 6, 7, 8, 10, 11, 12, 13)
-hero_index = {character_roster[x]:x for x in range(0,len(character_roster))}
-
 main_menu_window = sg.Window('Neur - A Net Creation Tool', default_element_size=(40, 1)).Layout(main_menu_layout)
 
 exit_value = False
@@ -73,19 +42,62 @@ while not exit_value:
 	if event is None or event == 'Exit':
 		exit_value = True
 	elif event == 'DeepWatch':
+		with open('deepwatch.dill', 'rb') as file:
+			network = dill.load(file)
+			
+		character_roster = ['Ana', 'Ashe', 'Baptiste', 'Bastion', 'Brigitte', 'D.va',
+					'Doomfist', 'Genji', 'Hanzo', 'Junkrat', 'Lucio', 'McCree',
+					'Mei', 'Mercy', 'Moira', 'Orisa', 'Pharah', 'Reaper', 'Reinhardt',
+					'Roadhog', 'Soldier', 'Sombra', 'Symmetra', 'Torbjorn', 'Tracer',
+					'Widowmaker', 'Winston', 'Hammond', 'Zarya', 'Zenyatta']
+
+		level_of_play = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Master', 'Grandmaster']
+
+		map = ['Hanamura', 'Horizon', 'Paris', 'Anubis', 'Volskaya', 'Dorado', 'Havana', 'Junkertown',
+				'Rialto', 'Route 66', 'Watchpoint Gibraltar', 'Blizzard World', 'Eichenwalde', 'Hollywood'
+				'King\'s Row', 'Numbani', 'Busan', 'Ilios', 'Lijiang Tower', 'Nepal', 'Oasis']
+		deepwatch_layout = [
+			[sg.Text('DeepWatch Interface', size=(30, 1), font=("Helvetica", 25))],
+			[sg.Text('Your team\t\tEnemy Team')],
+			[sg.InputCombo(character_roster, size=(20, 3)),sg.InputCombo(character_roster, size=(20, 3)),sg.T(' '  * 10),sg.Text('Map:')],
+			[sg.InputCombo(character_roster, size=(20, 3)),sg.InputCombo(character_roster, size=(20, 3)),sg.T(' '  * 10),sg.InputCombo(map, size=(20, 3))],
+			[sg.InputCombo(character_roster, size=(20, 3)),sg.InputCombo(character_roster, size=(20, 3)),sg.T(' '  * 10),sg.Text('Level of Play:')],
+			[sg.InputCombo(character_roster, size=(20, 3)),sg.InputCombo(character_roster, size=(20, 3)),sg.T(' '  * 10),sg.InputCombo(level_of_play, size=(20, 3))],
+			[sg.InputCombo(character_roster, size=(20, 3)),sg.InputCombo(character_roster, size=(20, 3))],
+			[sg.InputCombo(character_roster, size=(20, 3)),sg.InputCombo(character_roster, size=(20, 3))],
+			[sg.T(' ')],
+			[sg.T(' '*10),sg.Button('Predict'),sg.T(' '*30),sg.Text('Label Data for Training:')],
+			[sg.T(' ' * 10), sg.Text('Result:'), sg.T(' '*33),sg.InputCombo(('Loss'), size=(20, 3))],
+			[sg.T(' '*8), sg.Text('', size=(10, 1), font=("Helvetica", 25), key='change'),sg.Button('Add example')],
+			[sg.Text('_'  * 80)],
+			[sg.Text('Choose A Folder', size=(35, 1))],
+			[sg.Text('Your Folder', size=(15, 1), auto_size_text=False, justification='right'),
+			 sg.InputText('Selet file >>'), sg.FileBrowse()],
+			[sg.Submit(), sg.Button('Exit')]
+		]
+		
 		main_menu_window.Close()
 		deepwatch_window = sg.Window('Neur - A Net Creation Tool', default_element_size=(40, 1)).Layout(deepwatch_layout)
 
+				
+		selection_tuple = (0, 1, 2, 3, 5, 6, 7, 8, 10, 11, 12, 13)
+		hero_index = {character_roster[x]:x for x in range(0,len(character_roster))}
+		map_index = {map[x]:x for x in range(len(map))}
+		level_index = {level_of_play[x]:x for x in range(len(level_of_play))}
+		
 		while not exit_value:
 			event, values = deepwatch_window.Read()
-			print(values)
 			if event is None or event == 'Exit':
 				exit_value = True
 				deepwatch_window.Close()
 			elif event == 'Predict':
-				heros_selected = [hero_index[hero] for hero in [values[x] for x in selection_tuple]]
-				
-				deepwatch_window.Element('change').Update('Test')
+				map_slection_index = 4
+				level_selection_index = 9
+				example = [hero_index[hero] for hero in [values[x] for x in selection_tuple]]
+				example.append(map_index[values[map_slection_index]])
+				example.append(level_index[values[level_selection_index]])
+				pred = network.predict(example)
+				deepwatch_window.Element('change').Update('Win' if pred[0][0] > 0.0 else 'Loss')
 	elif event == 'General Training':
 		main_menu_window.Close()
 		general_training_window = sg.Window('Neur - A Net Creation Tool', default_element_size=(40, 1)).Layout(general_training_layout)
