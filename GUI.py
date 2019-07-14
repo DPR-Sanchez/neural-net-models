@@ -26,6 +26,8 @@ general_training_layout = 	[
 								[sg.T(' ' * 60), sg.InputCombo(('Loss'), size=(20, 3))],
 								[sg.T(' ' * 60), sg.Text('net model:')],
 								[sg.T(' ' * 60), sg.InputCombo(network_models, size=(20, 3))],
+								[sg.T(' ' * 60), sg.Text('epcch training period:')],
+								[sg.T(' ' * 60), sg.Input(size=(20, 3))],
 								[sg.T(' ' * 60), sg.Text('uploaded dataset: ')],
 								[sg.Text('_' * 80)],
 								[sg.Text('Choose your desired dataset', size=(35, 1))],
