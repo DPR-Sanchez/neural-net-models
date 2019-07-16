@@ -14,7 +14,7 @@ main_menu_layout = [
 
 general_training_layout = 	[
 								[sg.T(' ')],
-								[sg.T(' ' * 10), sg.Button('Predict'), sg.T(' ' * 4),sg.Button('Train'), sg.T(' ' * 12), sg.Text('Label Data for Training:')],
+								[sg.T(' ' * 10), sg.Button('Predict'), sg.T(' ' * 4),sg.Button('Train'), sg.T(' ' * 12), sg.Text('Cost function for Training:')],
 								[sg.T(' ' * 60), sg.InputCombo(('Loss'), size=(20, 3))],
 								[sg.T(' ' * 60), sg.Text('net model:')],
 								[sg.T(' ' * 60), sg.InputCombo(network_models, size=(20, 3))],
