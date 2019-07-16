@@ -4,6 +4,27 @@ import numpy as np
 		
 network_models = ('sequential 1', 'par net relu', 'par net sig', 'funnel net')
 
+cost_function_names = ('Binary cross entropy',
+					   'Mean Absolute Error',
+						'Mean Squared Error',
+						'Root Mean Squared Error',
+						'Mean Squared Logarithmic Error',
+						'Root Mean Squared Logarithmic Error',
+						'Categorical cross entropy',
+						'Binary hinge entropy',
+						'Categorical hinge entropy'
+					   )
+cost_function_values = {
+'Mean Absolute Error':'mae','Mean Squared Error':'mse',
+        'Root Mean Squared Error':'rmse',
+        'Mean Squared Logarithmic Error':'msle',
+        'Root Mean Squared Logarithmic Error':'rmsle',
+        'Categorical cross entropy':'categorical_crossentropy',
+        'Binary cross entropy':'binary_crossentropy',
+        'Binary hinge entropy':'binary_hinge',
+        'Categorical hinge entropy':'categorical_hinge'
+}
+
 sg.ChangeLookAndFeel('Black')
 
 main_menu_layout = [
@@ -15,7 +36,7 @@ main_menu_layout = [
 general_training_layout = 	[
 								[sg.T(' ')],
 								[sg.T(' ' * 10), sg.Button('Predict'), sg.T(' ' * 4),sg.Button('Train'), sg.T(' ' * 12), sg.Text('Cost function for Training:')],
-								[sg.T(' ' * 60), sg.InputCombo(('Loss'), size=(20, 3))],
+								[sg.T(' ' * 60), sg.InputCombo(cost_function_names, size=(20, 3))],
 								[sg.T(' ' * 60), sg.Text('net model:')],
 								[sg.T(' ' * 60), sg.InputCombo(network_models, size=(20, 3))],
 								[sg.T(' ' * 60), sg.Text('epoch training period:')],
@@ -28,7 +49,7 @@ general_training_layout = 	[
 								[sg.T(' ' * 60), sg.Input(default_text='2',size=(20, 3))],
 								[sg.T(' ' * 60), sg.Text('uploaded dataset: ')],
 								[sg.Text('_' * 80)],
-								[sg.Text('Choose your desired dataset that you would like to predict or train on.', size=(60, 1))],
+								[sg.Text('Choose your desired dataset that you would like to predict or train on',size=(60, 1))],
 								[sg.Text('Dataset:', size=(15, 1), auto_size_text=False, justification='right'),
 								 sg.InputText('Select dataset >>'), sg.FileBrowse()],
 								[sg.Text('Save trained network:', size=(35, 1))],
