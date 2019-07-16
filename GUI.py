@@ -33,7 +33,7 @@ general_training_layout = 	[
 								 sg.InputText('Select dataset >>'), sg.FileBrowse()],
 								[sg.Text('Save trained network:', size=(35, 1))],
 								[sg.Text('save location:', size=(15, 1), auto_size_text=False, justification='right'),
-								 sg.InputText('Select save location >>'), sg.FileBrowse()],
+								 sg.InputText('Select save location >>'), sg.SaveAs()],
 								[sg.Submit(), sg.Button('Save Net'),sg.Button('Exit')]
 							]
 
