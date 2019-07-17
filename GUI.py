@@ -1,6 +1,7 @@
 import PySimpleGUI as sg
 import datetime
 import dill
+import models.models_training as neural_training
 import numpy as np
 		
 network_models = ('sequential 1', 'par net relu', 'par net sig', 'funnel net')
@@ -133,22 +134,33 @@ while not exit_value:
 		main_menu_window.Close()
 		general_training_window = sg.Window('Neur - A Net Creation Tool', default_element_size=(40, 1)).Layout(general_training_layout)
 
+		trained_net = None
+
 		while not exit_value:
 			event, values = general_training_window.Read()
-
-
-			#
-
-
+			print(values)
 			if event is None or event == 'Exit':
 				exit_value = True
 				general_training_window.Close()
+			elif event == 'Train':
+				if values[6] != 'Select dataset >>' and values[6][-3:]=='csv':
+					#numpy tensor rand
+					training_results = neural_training.train_model(numpy_seed=values[2],tensor_seed=values[3],ran_seed=values[4],datasource=values[6],network_select=values[1])
+					trained_net = training_results[0]
+				else:
+					sg.Popup("Please select a csv based dataset")
 			elif event == 'Save Net':
-				print(event, "\n", values, "\n\n")
-				file_save_name = f'{values[7]}.dill' if \
-					values[7] != 'Select trained neural net >>' else\
-					f"Neur trained net {str(datetime.datetime.now()).replace(':','').replace('-','').replace(' ','').replace('.','')}.dill"
+				if trained_net != None:
+					print(event, "\n", values, "\n\n")
+					file_save_name = f'{values[7]}.dill' if \
+						values[7] != 'Select trained neural net >>' else\
+						f"Neur trained net {str(datetime.datetime.now()).replace(':','').replace('-','').replace(' ','').replace('.','')}.dill"
 
+					with open(file_save_name, 'wb') as f:
+						dill.dump(trained_net, f)
+
+				else:
+					sg.Popup("Please train a Neural Network before attempting to save.")
 
 			elif event == 'Predict':
 				pass
