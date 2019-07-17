@@ -1,4 +1,5 @@
 import PySimpleGUI as sg
+import datetime
 import dill
 import numpy as np
 		
@@ -134,10 +135,20 @@ while not exit_value:
 
 		while not exit_value:
 			event, values = general_training_window.Read()
-			file_save_name = f'{values[7]}.dill'
-			
+
+
+			#
+
+
 			if event is None or event == 'Exit':
 				exit_value = True
 				general_training_window.Close()
+			elif event == 'Save Net':
+				print(event, "\n", values, "\n\n")
+				file_save_name = f'{values[7]}.dill' if \
+					values[7] != 'Select trained neural net >>' else\
+					f"Neur trained net {str(datetime.datetime.now()).replace(':','').replace('-','').replace(' ','').replace('.','')}.dill"
+
+
 			elif event == 'Predict':
 				pass
