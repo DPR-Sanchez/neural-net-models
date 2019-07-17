@@ -8,7 +8,7 @@ from tensorflow import keras
 from sklearn import preprocessing
 
 
-def train_model(numpy_seed=614,tensor_seed=1234,ran_seed=2,datasource='training.csv',network_select=1):
+def train_model(numpy_seed=614,tensor_seed=1234,ran_seed=2,datasource='training.csv',network_select='sequential 1'):
 	#datasource should be the string path to data csv
 	training_set = np.genfromtxt(datasource, delimiter=',')
 	np.random.seed(numpy_seed)
@@ -71,14 +71,14 @@ def train_model(numpy_seed=614,tensor_seed=1234,ran_seed=2,datasource='training.
 									   (parchain_negative_two | parchain_zero_two) >> \
 									   Tanh(30) >> Sigmoid(1)
 
-	networks = [
-		sequential_net_one,
-		parralel_network_relu_out,
-		parralel_network_sig_out,
-		parralel_funnel_network_relu_out
-	]
+	net_select_dict = {
+		'sequential 1':sequential_net_one,
+		'par net relu':parralel_network_relu_out,
+		'par net sig':parralel_network_sig_out,
+		'funnel net':parralel_funnel_network_relu_out
+	}
 
-	network = networks[network_select]
+	network = net_select_dict[network_select]
 
 	optimizer = algorithms.Adam(
 		network,
@@ -88,7 +88,7 @@ def train_model(numpy_seed=614,tensor_seed=1234,ran_seed=2,datasource='training.
 	)
 
 	optimizer.train(training_examples, training_labels, test_examples, test_labels, epochs=2)
-	optimizer.plot_errors()
+
 	pred = [1 if i > 0 else 0 for i in optimizer.predict(test_examples)]
 	print(test_labels.T)
 	print(pred)
@@ -97,4 +97,6 @@ def train_model(numpy_seed=614,tensor_seed=1234,ran_seed=2,datasource='training.
 
 	accuracy = [1 if pred[i] == test_labels[i] else 0 for i in range(len(pred))].count(1) / len(pred)
 	print(f'{accuracy * 100:.2f}% accuracy')
-	
+
+	return (optimizer,optimizer.plot_errors())
+
