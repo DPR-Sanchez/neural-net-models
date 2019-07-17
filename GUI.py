@@ -52,10 +52,13 @@ general_training_layout = 	[
 								[sg.Text('Choose your desired dataset that you would like to predict or train on',size=(60, 1))],
 								[sg.Text('Dataset:', size=(15, 1), auto_size_text=False, justification='right'),
 								 sg.InputText('Select dataset >>'), sg.FileBrowse()],
+								[sg.Text('select a trained neural network you would like to load',size=(60, 1))],
+								[sg.Text('trained net:', size=(15, 1), auto_size_text=False, justification='right'),
+								 sg.InputText('Select trained neural net >>'), sg.FileBrowse()],
 								[sg.Text('Save trained network:', size=(35, 1))],
 								[sg.Text('save location:', size=(15, 1), auto_size_text=False, justification='right'),
 								 sg.InputText('Select save location >>'), sg.FileSaveAs()],
-								[sg.Submit(), sg.Button('Save Net'),sg.Button('Exit')]
+								[sg.Submit(), sg.Button('Load Net'),sg.Button('Save Net'),sg.Button('Exit')]
 							]
 
 
@@ -131,6 +134,8 @@ while not exit_value:
 
 		while not exit_value:
 			event, values = general_training_window.Read()
+			file_save_name = f'{values[7]}.dill'
+			
 			if event is None or event == 'Exit':
 				exit_value = True
 				general_training_window.Close()
