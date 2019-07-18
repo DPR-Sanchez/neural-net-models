@@ -144,9 +144,19 @@ while not exit_value:
 				general_training_window.Close()
 			elif event == 'Train':
 				if values[6] != 'Select dataset >>' and values[6][-3:]=='csv':
-					#numpy tensor rand
-					training_results = neural_training.train_model(numpy_seed=int(values[2]),tensor_seed=values[3],ran_seed=values[4],datasource=values[6],network_select=values[1])
-					trained_net = training_results[0]
+					#verify all integer inputs are actually integers
+					try:
+						values[2], values[3], values[4] = (int(x) for x in [values[2],values[3],values[4]])
+					except Exception as e:
+						sg.Popup("Please verify that all seed value inputs are integers")
+						
+					if all([type(1)==type(x) for x in [values[2],values[3],values[4]]]):
+						#numpy tensor rand
+						training_results = neural_training.train_model(numpy_seed=values[2],tensor_seed=values[3],ran_seed=values[4],datasource=values[6],network_select=values[1])
+						trained_net = training_results[0]
+
+					else:
+						sg.Popup("Please verify that all seed value inputs are integers")
 				else:
 					sg.Popup("Please select a csv based dataset")
 			elif event == 'Save Net':
