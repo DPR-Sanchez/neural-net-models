@@ -1,7 +1,7 @@
 import PySimpleGUI as sg
 import datetime
 import dill
-import models.models_training as neural_training
+import models_training as neural_training
 import numpy as np
 		
 network_models = ('sequential 1', 'par net relu', 'par net sig', 'funnel net')
@@ -145,7 +145,7 @@ while not exit_value:
 			elif event == 'Train':
 				if values[6] != 'Select dataset >>' and values[6][-3:]=='csv':
 					#numpy tensor rand
-					training_results = neural_training.train_model(numpy_seed=values[2],tensor_seed=values[3],ran_seed=values[4],datasource=values[6],network_select=values[1])
+					training_results = neural_training.train_model(numpy_seed=int(values[2]),tensor_seed=values[3],ran_seed=values[4],datasource=values[6],network_select=values[1])
 					trained_net = training_results[0]
 				else:
 					sg.Popup("Please select a csv based dataset")
