@@ -69,7 +69,7 @@ def train_model(numpy_seed=614,tensor_seed=1234,ran_seed=2,datasource='training.
 									   (parsig | partan | parelu | parchain_negative | parchain_zero) >> \
 									   Concatenate() >> (parsig_two | partan_two | parelu_two) >> Concatenate() >> \
 									   (parchain_negative_two | parchain_zero_two) >> \
-									   Tanh(30) >> Sigmoid(1)
+									   Concatenate() >> Tanh(30) >> Sigmoid(1)
 
 	net_select_dict = {
 		'sequential 1':sequential_net_one,
