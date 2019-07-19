@@ -1,11 +1,12 @@
 from neupy.layers import *
 from neupy import algorithms
-import numpy as np
-from sklearn.model_selection import train_test_split
 from random import seed
-import tensorflow as tf
-from tensorflow import keras
 from sklearn import preprocessing
+from sklearn.model_selection import train_test_split
+from tensorflow import keras
+
+import numpy as np
+import tensorflow as tf
 
 
 def train_model(numpy_seed=614,tensor_seed=1234,ran_seed=2,datasource='training.csv',network_select='sequential 1'):
