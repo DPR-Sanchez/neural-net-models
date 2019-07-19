@@ -3,10 +3,10 @@ import datetime
 import dill
 import models_training as neural_training
 import PySimpleGUI as sg
-		
+import asyncio		
 
 
-def gui_layouts():
+async def gui_layouts():
 	sg.ChangeLookAndFeel('Black')
 
 	main_menu_layout = [
@@ -167,5 +167,11 @@ async def events_loop(layouts_list):
 				elif event == 'Predict':
 					pass
 
-def gui_launch():
-	events_loop(gui_layouts())
+async def gui_launch():
+	layouts = await gui_layouts()
+	await events_loop(layouts)
+	
+if __name__ == '__main__':
+	loop = asyncio.get_event_loop()
+	task = loop.create_task(gui_launch())
+	loop.run_until_complete(task)
