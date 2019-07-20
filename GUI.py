@@ -1,4 +1,4 @@
-from CONSTANTS import constants
+from CONSTANTS import constants,fetch_deepwatch_contants
 
 import datetime
 import dill
@@ -45,19 +45,21 @@ async def gui_layouts():
 		[sg.Submit(), sg.Button('Load Net'), sg.Button('Save Net'), sg.Button('Exit')]
 	]
 
+	character_roster, level_of_play, map = await fetch_deepwatch_contants()
+
 	deepwatch_layout = [
 		[sg.Text('DeepWatch Interface', size=(30, 1), font=("Helvetica", 25))],
 		[sg.Text('Your team\t\tEnemy Team')],
-		[sg.InputCombo(constants.character_roster, size=(20, 3)), sg.InputCombo(constants.character_roster, size=(20, 3)),
+		[sg.InputCombo(character_roster, size=(20, 3)), sg.InputCombo(character_roster, size=(20, 3)),
 		 sg.T(' ' * 10), sg.Text('Map:')],
-		[sg.InputCombo(constants.character_roster, size=(20, 3)), sg.InputCombo(constants.character_roster, size=(20, 3)),
-		 sg.T(' ' * 10), sg.InputCombo(constants.map, size=(20, 3))],
-		[sg.InputCombo(constants.character_roster, size=(20, 3)), sg.InputCombo(constants.character_roster, size=(20, 3)),
+		[sg.InputCombo(character_roster, size=(20, 3)), sg.InputCombo(character_roster, size=(20, 3)),
+		 sg.T(' ' * 10), sg.InputCombo(map, size=(20, 3))],
+		[sg.InputCombo(character_roster, size=(20, 3)), sg.InputCombo(character_roster, size=(20, 3)),
 		 sg.T(' ' * 10), sg.Text('Level of Play:')],
-		[sg.InputCombo(constants.character_roster, size=(20, 3)), sg.InputCombo(constants.character_roster, size=(20, 3)),
-		 sg.T(' ' * 10), sg.InputCombo(constants.level_of_play, size=(20, 3))],
-		[sg.InputCombo(constants.character_roster, size=(20, 3)), sg.InputCombo(constants.character_roster, size=(20, 3))],
-		[sg.InputCombo(constants.character_roster, size=(20, 3)), sg.InputCombo(constants.character_roster, size=(20, 3))],
+		[sg.InputCombo(character_roster, size=(20, 3)), sg.InputCombo(character_roster, size=(20, 3)),
+		 sg.T(' ' * 10), sg.InputCombo(level_of_play, size=(20, 3))],
+		[sg.InputCombo(character_roster, size=(20, 3)), sg.InputCombo(character_roster, size=(20, 3))],
+		[sg.InputCombo(character_roster, size=(20, 3)), sg.InputCombo(character_roster, size=(20, 3))],
 		[sg.T(' ')],
 		[sg.T(' ' * 10), sg.Button('Predict'), sg.T(' ' * 30), sg.Text('Label Data for Training:')],
 		[sg.T(' ' * 10), sg.Text('Result:'), sg.T(' ' * 33), sg.InputCombo(('Loss'), size=(20, 3))],
@@ -94,10 +96,12 @@ async def events_loop(layouts_list):
 			deepwatch_window = sg.Window('Neur - A Net Creation Tool', default_element_size=(40, 1)).Layout(
 				layouts_list[2])
 
+			character_roster, level_of_play, map = fetch_deepwatch_contants()
+			
 			selection_tuple = (0, 1, 2, 3, 5, 6, 7, 8, 10, 11, 12, 13)
-			hero_index = {constants.character_roster[x]: x for x in range(0, len(constants.character_roster))}
-			map_index = {constants.map[x]: x for x in range(len(constants.map))}
-			level_index = {constants.level_of_play[x]: x for x in range(len(constants.level_of_play))}
+			hero_index = {character_roster[x]: x for x in range(0, len(character_roster))}
+			map_index = {map[x]: x for x in range(len(map))}
+			level_index = {level_of_play[x]: x for x in range(len(level_of_play))}
 
 			while not exit_value:
 				event, values = deepwatch_window.Read()
@@ -167,6 +171,7 @@ async def events_loop(layouts_list):
 					pass
 
 async def gui_launch():
+	await constants()
 	layouts = await gui_layouts()
 	await events_loop(layouts)
 	

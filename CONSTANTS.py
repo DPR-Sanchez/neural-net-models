@@ -1,4 +1,4 @@
-def constants():
+async def constants():
 	constants.NETWORK_MODELS = ('sequential 1', 'par net relu', 'par net sig', 'funnel net')
 
 	constants.COST_FUNCTION_NAMES = ('Binary cross entropy',
@@ -40,4 +40,5 @@ def constants():
 		'Busan', 'Ilios', 'Lijiang Tower', 'Nepal', 'Oasis'
 	]
 
-constants()
+async def fetch_deepwatch_contants():
+	return (constants.character_roster, constants.level_of_play, constants.map)
