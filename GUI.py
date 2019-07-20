@@ -1,4 +1,5 @@
 from CONSTANTS import constants
+
 import datetime
 import dill
 import models_training as neural_training
@@ -17,7 +18,7 @@ async def gui_layouts():
 
 	general_training_layout = [
 		[sg.T(' ')],
-		[sg.T(' ' * 10), sg.Button('Predict'), sg.T(' ' * 4), sg.Button('Train'), sg.T(' ' * 12),
+		[sg.Button('Predict'), sg.Button('Train'),sg.Button('Show training history'),
 		 sg.Text('Cost function for Training:')],
 		[sg.T(' ' * 60), sg.InputCombo(constants.COST_FUNCTION_NAMES, size=(20, 3))],
 		[sg.T(' ' * 60), sg.Text('net model:')],
