@@ -73,7 +73,6 @@ async def gui_layouts():
 	return [main_menu_layout,general_training_layout, deepwatch_layout]
 
 
-
 async def events_loop(layouts_list):
 	exit_value = False
 	main_menu_window = sg.Window('Neur - A Net Creation Tool', default_element_size=(40, 1)).Layout(layouts_list[0])
@@ -87,17 +86,21 @@ async def events_loop(layouts_list):
 			with open('deepwatch.dill', 'rb') as file:
 				network = dill.load(file)
 
-			character_roster = ['Ana', 'Ashe', 'Baptiste', 'Bastion', 'Brigitte', 'D.va',
-								'Doomfist', 'Genji', 'Hanzo', 'Junkrat', 'Lucio', 'McCree',
-								'Mei', 'Mercy', 'Moira', 'Orisa', 'Pharah', 'Reaper', 'Reinhardt',
-								'Roadhog', 'Soldier', 'Sombra', 'Symmetra', 'Torbjorn', 'Tracer',
-								'Widowmaker', 'Winston', 'Hammond', 'Zarya', 'Zenyatta']
+			character_roster = [
+									'Ana', 'Ashe', 'Baptiste', 'Bastion', 'Brigitte', 'D.va',
+									'Doomfist', 'Genji', 'Hanzo', 'Junkrat', 'Lucio', 'McCree',
+									'Mei', 'Mercy', 'Moira', 'Orisa', 'Pharah', 'Reaper', 'Reinhardt',
+									'Roadhog', 'Soldier', 'Sombra', 'Symmetra', 'Torbjorn', 'Tracer',
+									'Widowmaker', 'Winston', 'Hammond', 'Zarya', 'Zenyatta'
+								]
 
 			level_of_play = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Master', 'Grandmaster']
 
-			map = ['Hanamura', 'Horizon', 'Paris', 'Anubis', 'Volskaya', 'Dorado', 'Havana', 'Junkertown',
+			map = [
+					'Hanamura', 'Horizon', 'Paris', 'Anubis', 'Volskaya', 'Dorado', 'Havana', 'Junkertown',
 					'Rialto', 'Route 66', 'Watchpoint Gibraltar', 'Blizzard World', 'Eichenwalde', 'Hollywood'
-					'King\'s Row','Numbani', 'Busan', 'Ilios', 'Lijiang Tower', 'Nepal', 'Oasis']
+					'King\'s Row','Numbani', 'Busan', 'Ilios', 'Lijiang Tower', 'Nepal', 'Oasis'
+					]
 
 
 			main_menu_window.Close()
@@ -146,8 +149,8 @@ async def events_loop(layouts_list):
 						if all([type(1) == type(x) for x in [values[2], values[3], values[4]]]):
 							# numpy tensor rand
 							training_results = neural_training.train_model(numpy_seed=values[2], tensor_seed=values[3],
-																		   ran_seed=values[4], datasource=values[6],
-																		   network_select=values[1])
+																			ran_seed=values[4], datasource=values[6],
+																			network_select=values[1])
 							trained_net = training_results
 
 						else:
@@ -166,7 +169,10 @@ async def events_loop(layouts_list):
 
 					else:
 						sg.Popup("Please train a Neural Network before attempting to save.")
-
+				elif event == 'Show training history':
+					pass
+				elif event == 'Load Net'
+					pass
 				elif event == 'Predict':
 					pass
 
