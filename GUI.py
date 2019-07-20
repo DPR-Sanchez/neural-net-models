@@ -145,7 +145,7 @@ async def events_loop(layouts_list):
 							training_results = neural_training.train_model(numpy_seed=values[2], tensor_seed=values[3],
 																		   ran_seed=values[4], datasource=values[6],
 																		   network_select=values[1])
-							trained_net = training_results[0]
+							trained_net = training_results
 
 						else:
 							sg.Popup("Please verify that all seed value inputs are integers")
@@ -175,3 +175,4 @@ if __name__ == '__main__':
 	loop = asyncio.get_event_loop()
 	task = loop.create_task(gui_launch())
 	loop.run_until_complete(task)
+	loop.close()
