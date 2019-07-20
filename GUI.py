@@ -44,7 +44,33 @@ async def gui_layouts():
 		 sg.InputText('Select save location >>'), sg.FileSaveAs()],
 		[sg.Submit(), sg.Button('Load Net'), sg.Button('Save Net'), sg.Button('Exit')]
 	]
-	return [main_menu_layout,general_training_layout]
+
+	deepwatch_layout = [
+		[sg.Text('DeepWatch Interface', size=(30, 1), font=("Helvetica", 25))],
+		[sg.Text('Your team\t\tEnemy Team')],
+		[sg.InputCombo(character_roster, size=(20, 3)), sg.InputCombo(character_roster, size=(20, 3)),
+		 sg.T(' ' * 10), sg.Text('Map:')],
+		[sg.InputCombo(character_roster, size=(20, 3)), sg.InputCombo(character_roster, size=(20, 3)),
+		 sg.T(' ' * 10), sg.InputCombo(map, size=(20, 3))],
+		[sg.InputCombo(character_roster, size=(20, 3)), sg.InputCombo(character_roster, size=(20, 3)),
+		 sg.T(' ' * 10), sg.Text('Level of Play:')],
+		[sg.InputCombo(character_roster, size=(20, 3)), sg.InputCombo(character_roster, size=(20, 3)),
+		 sg.T(' ' * 10), sg.InputCombo(level_of_play, size=(20, 3))],
+		[sg.InputCombo(character_roster, size=(20, 3)), sg.InputCombo(character_roster, size=(20, 3))],
+		[sg.InputCombo(character_roster, size=(20, 3)), sg.InputCombo(character_roster, size=(20, 3))],
+		[sg.T(' ')],
+		[sg.T(' ' * 10), sg.Button('Predict'), sg.T(' ' * 30), sg.Text('Label Data for Training:')],
+		[sg.T(' ' * 10), sg.Text('Result:'), sg.T(' ' * 33), sg.InputCombo(('Loss'), size=(20, 3))],
+		[sg.T(' ' * 8), sg.Text('', size=(10, 1), font=("Helvetica", 25), key='change'),
+		 sg.Button('Add example')],
+		[sg.Text('_' * 80)],
+		[sg.Text('Choose A Folder', size=(35, 1))],
+		[sg.Text('Your Folder', size=(15, 1), auto_size_text=False, justification='right'),
+		 sg.InputText('Selet file >>'), sg.FileBrowse()],
+		[sg.Submit(), sg.Button('Exit')]
+	]
+
+	return [main_menu_layout,general_training_layout, deepwatch_layout]
 
 
 
@@ -70,37 +96,13 @@ async def events_loop(layouts_list):
 			level_of_play = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Master', 'Grandmaster']
 
 			map = ['Hanamura', 'Horizon', 'Paris', 'Anubis', 'Volskaya', 'Dorado', 'Havana', 'Junkertown',
-				   'Rialto', 'Route 66', 'Watchpoint Gibraltar', 'Blizzard World', 'Eichenwalde', 'Hollywood'
-																								  'King\'s Row',
-				   'Numbani', 'Busan', 'Ilios', 'Lijiang Tower', 'Nepal', 'Oasis']
-			deepwatch_layout = [
-				[sg.Text('DeepWatch Interface', size=(30, 1), font=("Helvetica", 25))],
-				[sg.Text('Your team\t\tEnemy Team')],
-				[sg.InputCombo(character_roster, size=(20, 3)), sg.InputCombo(character_roster, size=(20, 3)),
-				 sg.T(' ' * 10), sg.Text('Map:')],
-				[sg.InputCombo(character_roster, size=(20, 3)), sg.InputCombo(character_roster, size=(20, 3)),
-				 sg.T(' ' * 10), sg.InputCombo(map, size=(20, 3))],
-				[sg.InputCombo(character_roster, size=(20, 3)), sg.InputCombo(character_roster, size=(20, 3)),
-				 sg.T(' ' * 10), sg.Text('Level of Play:')],
-				[sg.InputCombo(character_roster, size=(20, 3)), sg.InputCombo(character_roster, size=(20, 3)),
-				 sg.T(' ' * 10), sg.InputCombo(level_of_play, size=(20, 3))],
-				[sg.InputCombo(character_roster, size=(20, 3)), sg.InputCombo(character_roster, size=(20, 3))],
-				[sg.InputCombo(character_roster, size=(20, 3)), sg.InputCombo(character_roster, size=(20, 3))],
-				[sg.T(' ')],
-				[sg.T(' ' * 10), sg.Button('Predict'), sg.T(' ' * 30), sg.Text('Label Data for Training:')],
-				[sg.T(' ' * 10), sg.Text('Result:'), sg.T(' ' * 33), sg.InputCombo(('Loss'), size=(20, 3))],
-				[sg.T(' ' * 8), sg.Text('', size=(10, 1), font=("Helvetica", 25), key='change'),
-				 sg.Button('Add example')],
-				[sg.Text('_' * 80)],
-				[sg.Text('Choose A Folder', size=(35, 1))],
-				[sg.Text('Your Folder', size=(15, 1), auto_size_text=False, justification='right'),
-				 sg.InputText('Selet file >>'), sg.FileBrowse()],
-				[sg.Submit(), sg.Button('Exit')]
-			]
+					'Rialto', 'Route 66', 'Watchpoint Gibraltar', 'Blizzard World', 'Eichenwalde', 'Hollywood'
+					'King\'s Row','Numbani', 'Busan', 'Ilios', 'Lijiang Tower', 'Nepal', 'Oasis']
+
 
 			main_menu_window.Close()
 			deepwatch_window = sg.Window('Neur - A Net Creation Tool', default_element_size=(40, 1)).Layout(
-				deepwatch_layout)
+				layouts_list[2])
 
 			selection_tuple = (0, 1, 2, 3, 5, 6, 7, 8, 10, 11, 12, 13)
 			hero_index = {character_roster[x]: x for x in range(0, len(character_roster))}
