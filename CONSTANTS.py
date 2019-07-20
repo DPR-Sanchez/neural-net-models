@@ -23,4 +23,21 @@ def constants():
 			'Categorical hinge entropy':'categorical_hinge'
 	}
 
+	constants.character_roster = [
+		'Ana', 'Ashe', 'Baptiste', 'Bastion', 'Brigitte', 'D.va',
+		'Doomfist', 'Genji', 'Hanzo', 'Junkrat', 'Lucio', 'McCree',
+		'Mei', 'Mercy', 'Moira', 'Orisa', 'Pharah', 'Reaper', 'Reinhardt',
+		'Roadhog', 'Soldier', 'Sombra', 'Symmetra', 'Torbjorn', 'Tracer',
+		'Widowmaker', 'Winston', 'Hammond', 'Zarya', 'Zenyatta'
+	]
+
+	constants.level_of_play = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Master', 'Grandmaster']
+
+	constants.map = [
+		'Hanamura', 'Horizon', 'Paris', 'Anubis', 'Volskaya', 'Dorado', 'Havana', 'Junkertown',
+		'Rialto', 'Route 66', 'Watchpoint Gibraltar', 'Blizzard World', 'Eichenwalde', 'Hollywood'
+																					   'King\'s Row', 'Numbani',
+		'Busan', 'Ilios', 'Lijiang Tower', 'Nepal', 'Oasis'
+	]
+
 constants()
