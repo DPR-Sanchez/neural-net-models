@@ -1,4 +1,4 @@
-from CONSTANTS import constants,fetch_deepwatch_contants
+import CONSTANTS
 
 import datetime
 import dill
@@ -10,19 +10,20 @@ import asyncio
 async def gui_layouts():
 
 	sg.ChangeLookAndFeel('Black')
-	print('debug test')
 	main_menu_layout = [
 		[sg.Button('General Training'), sg.Button('DeepWatch')],
 		[sg.T(' ' * 10)],
 		[sg.Button('Exit')]
 	]
+	
+	NETWORK_MODELS, COST_FUNCTION_NAMES, COST_FUNCTION_VALUES  = CONSTANTS.NEUR_CONSTANTS().get_constants_tuple()
 	general_training_layout = [
 		[sg.T(' ')],
 		[sg.Button('Predict'), sg.Button('Train'),sg.Button('Show training history'),
 		 sg.Text('Cost function for Training:')],
-		[sg.T(' ' * 60), sg.InputCombo(constants.COST_FUNCTION_NAMES, size=(20, 3))],
+		[sg.T(' ' * 60), sg.InputCombo(COST_FUNCTION_NAMES, size=(20, 3))],
 		[sg.T(' ' * 60), sg.Text('net model:')],
-		[sg.T(' ' * 60), sg.InputCombo(constants.NETWORK_MODELS, size=(20, 3))],
+		[sg.T(' ' * 60), sg.InputCombo(NETWORK_MODELS, size=(20, 3))],
 		[sg.T(' ' * 60), sg.Text('epoch training period:')],
 		[sg.T(' ' * 60), sg.Input(default_text='100', size=(20, 3))],
 		[sg.T(' ' * 60), sg.Text('numpy seed:')],
@@ -45,7 +46,7 @@ async def gui_layouts():
 		[sg.Submit(), sg.Button('Load Net'), sg.Button('Save Net'), sg.Button('Exit')]
 	]
 
-	character_roster, level_of_play, map = await fetch_deepwatch_contants()
+	character_roster, level_of_play, map = CONSTANTS.DEEPWATCH_CONSTANTS().get_constants_tuple()
 
 	deepwatch_layout = [
 		[sg.Text('DeepWatch Interface', size=(30, 1), font=("Helvetica", 25))],
@@ -96,7 +97,7 @@ async def events_loop(layouts_list):
 			deepwatch_window = sg.Window('Neur - A Net Creation Tool', default_element_size=(40, 1)).Layout(
 				layouts_list[2])
 
-			character_roster, level_of_play, map = fetch_deepwatch_contants()
+			character_roster, level_of_play, map = CONSTANTS.DEEPWATCH_CONSTANTS().get_constants_tuple()
 			
 			selection_tuple = (0, 1, 2, 3, 5, 6, 7, 8, 10, 11, 12, 13)
 			hero_index = {character_roster[x]: x for x in range(0, len(character_roster))}
@@ -171,7 +172,6 @@ async def events_loop(layouts_list):
 					pass
 
 async def gui_launch():
-	await constants()
 	layouts = await gui_layouts()
 	await events_loop(layouts)
 	
