@@ -41,4 +41,4 @@ async def constants():
 	]
 
 async def fetch_deepwatch_contants():
-	return (constants.character_roster, constants.level_of_play, constants.map)
+	return (await constants.character_roster, await constants.level_of_play, await constants.map)
