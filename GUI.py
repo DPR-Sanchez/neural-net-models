@@ -178,7 +178,7 @@ async def events_loop(layouts_list):
 					pass
 
 async def gui_launch():
-	layouts = await gui_layouts()
+	layouts = await gui_layouts('main menu')
 	await events_loop(layouts)
 	
 if __name__ == '__main__':
