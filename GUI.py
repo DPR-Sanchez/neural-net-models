@@ -180,7 +180,10 @@ async def events_loop(layouts_list):
 					else:
 						sg.Popup("Please train a Neural Network before attempting to save.")
 				elif event == 'Show training history':
-					pass
+					if trained_net != None:
+						trained_net.plot_errors()
+					else:
+						sg.Popup("Please train or load a neural net.")
 				elif event == 'Load Net':
 					if values[7]!= 'Select trained neural net >>':
 
@@ -195,7 +198,7 @@ async def events_loop(layouts_list):
 														default_element_size=(50, 1)
 													).Layout(load_pickle_confirm_layout)
 
-						event, values = confirm_window.Read()
+						event, _ = confirm_window.Read()
 
 						if event == 'Yes':
 							file_load_name = values[7]
@@ -204,6 +207,8 @@ async def events_loop(layouts_list):
 									trained_net = dill.load(f)
 							except Exception as e:
 								sg.Popup(str(e))
+							finally:
+								confirm_window.Close()
 						else:
 							confirm_window.Close()
 					else:
