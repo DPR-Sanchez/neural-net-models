@@ -170,8 +170,8 @@ async def events_loop(layouts_list):
 				elif event == 'Save Net':
 					if trained_net != None:
 						print(event, "\n", values, "\n\n")
-						file_save_name = f'{values[7]}.dill' if \
-							values[7] != 'Select trained neural net >>' else \
+						file_save_name = f'{values[8]}.dill' if \
+							values[8] != 'Select trained neural net >>' else \
 							f"Neur trained net {str(datetime.datetime.now()).replace(':','').replace('-','').replace(' ','').replace('.','')}.dill"
 
 						with open(file_save_name, 'wb') as f:
@@ -182,10 +182,15 @@ async def events_loop(layouts_list):
 				elif event == 'Show training history':
 					pass
 				elif event == 'Load Net':
-					if trained_net is not None:
-						nothing = None
+					if values[7]!= 'Select trained neural net >>'
+						file_load_name = values[7]
+						try:
+							with open(file_load_name, 'rb') as f:
+								trained_net = dill.load(f)
+						except Exception as e:
+							sg.Popup(str(e))
 					else:
-						sg.Popup("Please either train a netowrk or load a prior trained network")
+						sg.Popup("Please select trained neural net to load")
 				elif event == 'Predict':
 					pass
 
