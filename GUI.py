@@ -46,7 +46,7 @@ async def gui_layouts(layout):
 			[sg.Text('Save trained network:', size=(35, 1))],
 			[sg.Text('save location:', size=(15, 1), auto_size_text=False, justification='right'),
 			 sg.InputText('Select save location >>'), sg.FileSaveAs()],
-			[sg.Submit(), sg.Button('Load Net'), sg.Button('Save Net'), sg.Button('Exit')]
+			[sg.Submit(), sg.Button('Load Net'), sg.Button('Save Net'), sg.Button('Back'), sg.Button('Exit')]
 		]
 		return general_training_layout
 
@@ -75,7 +75,7 @@ async def gui_layouts(layout):
 			[sg.Text('Choose A Folder', size=(35, 1))],
 			[sg.Text('Your Folder', size=(15, 1), auto_size_text=False, justification='right'),
 			 sg.InputText('Selet file >>'), sg.FileBrowse()],
-			[sg.Submit(), sg.Button('Exit')]
+			[sg.Submit(), sg.Button('Back'), sg.Button('Exit')]
 		]
 
 		return deepwatch_layout
@@ -110,7 +110,8 @@ async def events_loop(layouts_list):
 			map_index = {map[x]: x for x in range(len(map))}
 			level_index = {level_of_play[x]: x for x in range(len(level_of_play))}
 
-			while not exit_value:
+			deepwatch_window_close = False
+			while not exit_value | deepwatch_window_close:
 				event, values = deepwatch_window.Read()
 				if event is None or event == 'Exit':
 					exit_value = True
@@ -123,14 +124,22 @@ async def events_loop(layouts_list):
 					example.append(level_index[values[level_selection_index]])
 					pred = network.predict(example)
 					deepwatch_window.Element('change').Update('Win' if pred[0][0] > 0.0 else 'Loss')
+				elif event == 'Back':
+
+					main_menu_window = sg.Window(
+													'Neur - A Net Creation Tool',
+													default_element_size=(40, 1)).Layout(await gui_layouts('main menu')
+												)
+					deepwatch_window.Close()
+					deepwatch_window_close = True
 		elif event == 'General Training':
 			main_menu_window.Close()
 			general_training_window = sg.Window('Neur - A Net Creation Tool', default_element_size=(40, 1)).Layout(
 				await gui_layouts('general'))
 
 			trained_net = None
-
-			while not exit_value:
+			general_window_close = False
+			while not exit_value | general_window_close:
 				event, values = general_training_window.Read()
 				print(values)
 				if event is None or event == 'Exit':
@@ -175,6 +184,15 @@ async def events_loop(layouts_list):
 						sg.Popup("Please either train a netowrk or load a prior trained network")
 				elif event == 'Predict':
 					pass
+				elif event == 'Back':
+
+					main_menu_window = sg.Window(
+													'Neur - A Net Creation Tool',
+													default_element_size=(40, 1)).Layout(await gui_layouts('main menu')
+												)
+					general_training_window.Close()
+					general_window_close = True
+
 
 async def gui_launch():
 	layouts = await gui_layouts('main menu')
