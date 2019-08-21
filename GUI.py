@@ -46,6 +46,7 @@ async def gui_layouts(layout):
 			[sg.Text('Save trained network:', size=(35, 1))],
 			[sg.Text('save location:', size=(15, 1), auto_size_text=False, justification='right'),
 			 sg.InputText('Select save location >>'), sg.FileSaveAs()],
+
 			[sg.Submit(), sg.Button('Load Net'), sg.Button('Save Net'), sg.Button('Back'), sg.Button('Exit')]
 		]
 		return general_training_layout
@@ -110,6 +111,7 @@ async def events_loop(layouts_list):
 			map_index = {map[x]: x for x in range(len(map))}
 			level_index = {level_of_play[x]: x for x in range(len(level_of_play))}
 
+
 			deepwatch_window_close = False
 			while not exit_value | deepwatch_window_close:
 				event, values = deepwatch_window.Read()
@@ -132,6 +134,7 @@ async def events_loop(layouts_list):
 												)
 					deepwatch_window.Close()
 					deepwatch_window_close = True
+
 		elif event == 'General Training':
 			main_menu_window.Close()
 			general_training_window = sg.Window('Neur - A Net Creation Tool', default_element_size=(40, 1)).Layout(
@@ -140,6 +143,7 @@ async def events_loop(layouts_list):
 			trained_net = None
 			general_window_close = False
 			while not exit_value | general_window_close:
+
 				event, values = general_training_window.Read()
 				print(values)
 				if event is None or event == 'Exit':
@@ -184,6 +188,7 @@ async def events_loop(layouts_list):
 						sg.Popup("Please either train a netowrk or load a prior trained network")
 				elif event == 'Predict':
 					pass
+
 				elif event == 'Back':
 
 					main_menu_window = sg.Window(
