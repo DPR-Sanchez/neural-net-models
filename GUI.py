@@ -2,7 +2,7 @@ import CONSTANTS
 
 import datetime
 import dill
-import models_training as neural_training
+import models_training
 import PySimpleGUI as sg
 import asyncio
 
@@ -141,6 +141,7 @@ async def events_loop(layouts_list):
 				await gui_layouts('general'))
 
 			trained_net = None
+			optimizer = None
 			general_window_close = False
 			while not exit_value | general_window_close:
 
@@ -159,9 +160,13 @@ async def events_loop(layouts_list):
 
 						if all([type(1) == type(x) for x in [values[2], values[3], values[4]]]):
 							# numpy tensor rand
-							trained_net = neural_training.train_model(numpy_seed=values[2], tensor_seed=values[3],
+
+							neur_constants = CONSTANTS.NEUR_CONSTANTS()
+
+							selected_loss_function = neur_constants.get_constants_tuple()[2][values[0]]
+							optimizer,trained_net = models_training.train_model(numpy_seed=values[2], tensor_seed=values[3],
 																			ran_seed=values[4], datasource=values[6],
-																			network_select=values[1])
+																			network_select=values[1],loss_function=selected_loss_function)
 
 						else:
 							sg.Popup("Please verify that all seed value inputs are integers")
@@ -180,8 +185,8 @@ async def events_loop(layouts_list):
 					else:
 						sg.Popup("Please train a Neural Network before attempting to save.")
 				elif event == 'Show training history':
-					if trained_net != None:
-						trained_net.plot_errors()
+					if optimizer != None:
+						optimizer.plot_errors()
 					else:
 						sg.Popup("Please train or load a neural net.")
 				elif event == 'Load Net':

@@ -15,7 +15,8 @@ class NEUR_CONSTANTS:
 							   )
 
 		self.COST_FUNCTION_VALUES = {
-		'Mean Absolute Error':'mae','Mean Squared Error':'mse',
+				'Mean Absolute Error':'mae',
+				'Mean Squared Error':'mse',
 				'Root Mean Squared Error':'rmse',
 				'Mean Squared Logarithmic Error':'msle',
 				'Root Mean Squared Logarithmic Error':'rmsle',
