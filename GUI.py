@@ -183,12 +183,29 @@ async def events_loop(layouts_list):
 					pass
 				elif event == 'Load Net':
 					if values[7]!= 'Select trained neural net >>':
-						file_load_name = values[7]
-						try:
-							with open(file_load_name, 'rb') as f:
-								trained_net = dill.load(f)
-						except Exception as e:
-							sg.Popup(str(e))
+
+						load_pickle_confirm_layout = [
+							[sg.Text('Loading pickle based objects can pose a security risk.', size=(40, 1), auto_size_text=False, justification='center')],
+							[sg.Text('Are you sure you trust the origins of this file?', size=(40, 1),
+									 auto_size_text=False, justification='center')],
+							[sg.Text(' '*26),sg.Button('Yes'), sg.Button('No')]
+						]
+						confirm_window = sg.Window(
+														'Load File Confirmation',
+														default_element_size=(50, 1)
+													).Layout(load_pickle_confirm_layout)
+
+						event, values = confirm_window.Read()
+
+						if event == 'Yes':
+							file_load_name = values[7]
+							try:
+								with open(file_load_name, 'rb') as f:
+									trained_net = dill.load(f)
+							except Exception as e:
+								sg.Popup(str(e))
+						else:
+							confirm_window.Close()
 					else:
 						sg.Popup("Please select trained neural net to load")
 				elif event == 'Predict':
@@ -198,8 +215,9 @@ async def events_loop(layouts_list):
 
 					main_menu_window = sg.Window(
 													'Neur - A Net Creation Tool',
-													default_element_size=(40, 1)).Layout(await gui_layouts('main menu')
-												)
+													default_element_size=(40, 1)
+												).Layout(await gui_layouts('main menu'))
+
 					general_training_window.Close()
 					general_window_close = True
 
