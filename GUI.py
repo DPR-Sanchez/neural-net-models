@@ -4,7 +4,7 @@ import datetime
 import dill
 import models_training as neural_training
 import PySimpleGUI as sg
-import asyncio		
+import asyncio
 
 
 async def gui_layouts(layout):
@@ -105,7 +105,7 @@ async def events_loop(layouts_list):
 			deepwatch_window = sg.Window('Neur - A Net Creation Tool', default_element_size=(40, 1)).Layout(await gui_layouts('deep watch'))
 
 			character_roster, level_of_play, map = CONSTANTS.DEEPWATCH_CONSTANTS().get_constants_tuple()
-			
+
 			selection_tuple = (0, 1, 2, 3, 5, 6, 7, 8, 10, 11, 12, 13)
 			hero_index = {character_roster[x]: x for x in range(0, len(character_roster))}
 			map_index = {map[x]: x for x in range(len(map))}
@@ -182,7 +182,7 @@ async def events_loop(layouts_list):
 				elif event == 'Show training history':
 					pass
 				elif event == 'Load Net':
-					if values[7]!= 'Select trained neural net >>'
+					if values[7]!= 'Select trained neural net >>':
 						file_load_name = values[7]
 						try:
 							with open(file_load_name, 'rb') as f:
@@ -207,7 +207,7 @@ async def events_loop(layouts_list):
 async def gui_launch():
 	layouts = await gui_layouts('main menu')
 	await events_loop(layouts)
-	
+
 if __name__ == '__main__':
 	loop = asyncio.get_event_loop()
 	task = loop.create_task(gui_launch())
