@@ -146,10 +146,9 @@ async def events_loop(layouts_list):
 
 						if all([type(1) == type(x) for x in [values[2], values[3], values[4]]]):
 							# numpy tensor rand
-							training_results = neural_training.train_model(numpy_seed=values[2], tensor_seed=values[3],
+							trained_net = neural_training.train_model(numpy_seed=values[2], tensor_seed=values[3],
 																			ran_seed=values[4], datasource=values[6],
 																			network_select=values[1])
-							trained_net = training_results
 
 						else:
 							sg.Popup("Please verify that all seed value inputs are integers")
