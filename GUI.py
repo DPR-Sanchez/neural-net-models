@@ -165,8 +165,10 @@ async def events_loop(layouts_list):
 
 							selected_loss_function = neur_constants.get_constants_tuple()[2][values[0]]
 							optimizer,trained_net = models_training.train_model(numpy_seed=values[2], tensor_seed=values[3],
-																			ran_seed=values[4], datasource=values[6],
-																			network_select=values[1],loss_function=selected_loss_function)
+																				ran_seed=values[4], data_source=values[6],
+																				network_select=values[1], loss_function=selected_loss_function,
+																				epochs_count=values[2]
+																				)
 
 						else:
 							sg.Popup("Please verify that all seed value inputs are integers")
@@ -174,7 +176,6 @@ async def events_loop(layouts_list):
 						sg.Popup("Please select a csv based dataset")
 				elif event == 'Save Net':
 					if trained_net != None:
-						print(event, "\n", values, "\n\n")
 						file_save_name = f'{values[8]}.dill' if \
 							values[8] != 'Select trained neural net >>' else \
 							f"Neur trained net {str(datetime.datetime.now()).replace(':','').replace('-','').replace(' ','').replace('.','')}.dill"
