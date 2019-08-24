@@ -5,6 +5,8 @@ import dill
 import models_training
 import PySimpleGUI as sg
 import asyncio
+import sys
+import traceback
 
 
 async def gui_layouts(layout):
@@ -187,7 +189,15 @@ async def events_loop(layouts_list):
 						sg.Popup("Please train a Neural Network before attempting to save.")
 				elif event == 'Show training history':
 					if optimizer != None:
-						optimizer.plot_errors()
+						try:
+							optimizer.plot_errors()
+						except Exception:
+							frame = sys.exc_info()[2]
+							formattedTb = traceback.format_tb(frame)
+							frame = frame.tb_next
+							while frame:
+								print(formattedTb.pop(0), '\t', frame.tb_frame.f_locals)
+								frame = frame.tb_next
 					else:
 						sg.Popup("Please train or load a neural net.")
 				elif event == 'Load Net':
