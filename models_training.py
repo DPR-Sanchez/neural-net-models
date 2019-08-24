@@ -98,7 +98,6 @@ def train_model(
 	)
 
 	optimizer.train(training_examples, training_labels, test_examples, test_labels, epochs=epochs_count)
-	optimizer.plot_errors()
 
 	pred = [1 if i > 0 else 0 for i in optimizer.predict(test_examples)]
 
