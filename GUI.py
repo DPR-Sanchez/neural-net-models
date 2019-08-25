@@ -5,6 +5,7 @@ import dill
 import models_training
 import PySimpleGUI as sg
 import asyncio
+import os
 import sys
 import traceback
 
@@ -22,6 +23,7 @@ async def gui_layouts(layout):
 		return main_menu_layout
 	if layout == 'general':
 		NETWORK_MODELS, COST_FUNCTION_NAMES, COST_FUNCTION_VALUES  = CONSTANTS.NEUR_CONSTANTS().get_constants_tuple()
+
 		general_training_layout = [
 			[sg.T(' ')],
 			[sg.Button('Predict'), sg.Button('Train'),sg.Button('Show training history'),
@@ -189,8 +191,27 @@ async def events_loop(layouts_list):
 						sg.Popup("Please train a Neural Network before attempting to save.")
 				elif event == 'Show training history':
 					if optimizer != None:
-						try:
-							optimizer.plot_errors()
+						#try:
+						#optimizer.plot_errors()
+						image_elem = sg.Image(
+						filename=f'{os.path.dirname(os.path.abspath(__file__))}{os.sep}resources{os.sep}placeholder_image.png')
+						image_elem
+
+						display_training_layout = [
+							[image_elem],
+							[sg.Text(' ' * 26), sg.Button('Back')]
+						]
+						display_training_window = sg.Window(
+							'Network Training history',
+							default_element_size=(50, 1)
+						).Layout(display_training_layout)
+
+						event, _ = display_training_window.Read()
+
+						if event == 'Back':
+							display_training_window.Close()
+
+						"""
 						except Exception:
 							frame = sys.exc_info()[2]
 							formattedTb = traceback.format_tb(frame)
@@ -198,6 +219,7 @@ async def events_loop(layouts_list):
 							while frame:
 								print(formattedTb.pop(0), '\t', frame.tb_frame.f_locals)
 								frame = frame.tb_next
+						"""
 					else:
 						sg.Popup("Please train or load a neural net.")
 				elif event == 'Load Net':
