@@ -104,7 +104,4 @@ def train_model(
 	accuracy = [1 if pred[i] == test_labels[i] else 0 for i in range(len(pred))].count(1) / len(pred)
 	print(f'{accuracy * 100:.2f}% accuracy')
 
-
-
 	return (optimizer,network)
-
