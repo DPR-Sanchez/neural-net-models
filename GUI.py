@@ -190,7 +190,7 @@ async def events_loop(layouts_list):
 				elif event == 'Show training history':
 					if optimizer != None:
 						try:
-							optimizer.plot_errors()
+							optimizer.plot_errors(pause=False)
 						except Exception:
 							frame = sys.exc_info()[2]
 							formattedTb = traceback.format_tb(frame)
