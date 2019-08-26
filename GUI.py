@@ -193,7 +193,9 @@ async def events_loop(layouts_list):
 					if optimizer != None:
 						#try:
 						#optimizer.plot_errors()
-						image_elem = sg.Image(optimizer.plot_errors(image=True))
+						image = optimizer.plot_errors(image=True)
+						image.save("training.png","PNG")
+						image_elem = sg.Image('training.png')
 
 						display_training_layout = [
 							[image_elem],
