@@ -8,6 +8,7 @@ import asyncio
 import os
 import sys
 import traceback
+import matplotlib.pyplot as plt
 
 
 async def gui_layouts(layout):
@@ -193,9 +194,9 @@ async def events_loop(layouts_list):
 					if optimizer != None:
 						#try:
 						#optimizer.plot_errors()
-						image = optimizer.plot_errors(image=True)
-						image.save("training.png","PNG")
-						image_elem = sg.Image('training.png')
+						optimizer.plot_errors(show=False)
+						plt.savefig('image.png')
+						image_elem = sg.Image(filename='image.png')
 
 						display_training_layout = [
 							[image_elem],
