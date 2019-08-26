@@ -5,10 +5,8 @@ import dill
 import models_training
 import PySimpleGUI as sg
 import asyncio
-import os
-import sys
-import traceback
 import matplotlib.pyplot as plt
+
 
 
 async def gui_layouts(layout):
@@ -30,7 +28,7 @@ async def gui_layouts(layout):
 			[sg.Button('Predict'), sg.Button('Train'),sg.Button('Show training history'),
 			 sg.Text('Cost function for Training:')],
 			[sg.T(' ' * 60), sg.InputCombo(COST_FUNCTION_NAMES, size=(20, 3))],
-			[sg.T(' ' * 60), sg.Text('net model:')],
+			[sg.Text('training accuracy: '),sg.T(' ' * 20), sg.Text('net model:')],
 			[sg.T(' ' * 60), sg.InputCombo(NETWORK_MODELS, size=(20, 3))],
 			[sg.T(' ' * 60), sg.Text('epoch training period:')],
 			[sg.T(' ' * 60), sg.Input(default_text='100', size=(20, 3))],
@@ -169,11 +167,12 @@ async def events_loop(layouts_list):
 							neur_constants = CONSTANTS.NEUR_CONSTANTS()
 
 							selected_loss_function = neur_constants.get_constants_tuple()[2][values[0]]
-							optimizer,trained_net = models_training.train_model(numpy_seed=values[2], tensor_seed=values[3],
+							optimizer,trained_net,accuracy = models_training.train_model(numpy_seed=values[2], tensor_seed=values[3],
 																				ran_seed=values[4], data_source=values[6],
 																				network_select=values[1], loss_function=selected_loss_function,
 																				epochs_count=values[2]
 																				)
+
 
 						else:
 							sg.Popup("Please verify that all seed value inputs are integers")
@@ -196,8 +195,8 @@ async def events_loop(layouts_list):
 						#try:
 						#optimizer.plot_errors()
 						optimizer.plot_errors(show=False)
-						plt.savefig('image.png')
-						image_elem = sg.Image(filename='image.png')
+						plt.savefig('training_history.png')
+						image_elem = sg.Image(filename='training_history.png')
 
 						display_training_layout = [
 							[image_elem],
