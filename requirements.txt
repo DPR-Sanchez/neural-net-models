@@ -1,0 +1,8 @@
+pysimplegui
+neupy
+dill
+sklearn
+tensorflow
+numpy
+pandas
+pillow
