@@ -1,0 +1,7 @@
+version: '3'
+services:
+  main:
+    build: .
+    environment:
+      - DISPLAY
+    network_mode: "host"

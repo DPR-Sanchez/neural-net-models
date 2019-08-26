@@ -191,6 +191,7 @@ async def events_loop(layouts_list):
 						sg.Popup("Please train a Neural Network before attempting to save.")
 				elif event == 'Show training history':
 					if optimizer != None:
+
 						#try:
 						#optimizer.plot_errors()
 						image = optimizer.plot_errors(image=True)
@@ -211,15 +212,7 @@ async def events_loop(layouts_list):
 						if event == 'Back':
 							display_training_window.Close()
 
-						"""
-						except Exception:
-							frame = sys.exc_info()[2]
-							formattedTb = traceback.format_tb(frame)
-							frame = frame.tb_next
-							while frame:
-								print(formattedTb.pop(0), '\t', frame.tb_frame.f_locals)
-								frame = frame.tb_next
-						"""
+
 					else:
 						sg.Popup("Please train or load a neural net.")
 				elif event == 'Load Net':
