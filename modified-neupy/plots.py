@@ -121,7 +121,7 @@ def figure_to_data(figure):
 
     # Get the RGBA buffer from the figure
     w, h = figure.canvas.get_width_height()
-    np_array = numpy.fromstring(figure.canvas.tostring_argb(), dtype=numpy.uint8)
+    np_array = numpy.frombytes(figure.canvas.tostring_argb(), dtype=numpy.uint8)
     np_array.shape = (w, h, 4)
 
     # canvas.tostring_argb give pixmap in ARGB mode. Roll the ALPHA channel to have it in RGBA mode
