@@ -76,6 +76,8 @@ def plot_error_per_epoch(train, valid, ax, logx=False):
 
 
 def plot_optimizer_errors(optimizer, logx=False, show=True, image=False, **figkwargs):
+    if image:
+        show=False
     if 'figsize' not in figkwargs:
         figkwargs['figsize'] = (12, 8)
 
