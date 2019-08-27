@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import PySimpleGUI as sg
 import os
 import re
+import base64
 
 
 async def gui_layouts(layout):
@@ -83,8 +84,16 @@ async def gui_layouts(layout):
 
 async def events_loop(layouts_list):
 	exit_value = False
-	main_menu_window = sg.Window('Neur - A Net Creation Tool', default_element_size=(40, 1)).Layout(await gui_layouts('main menu'))
-	main_menu_window.SetIcon(icon='Neur_Icon_256.ico')
+	with open('Neur_Icon_256.png', 'rb') as raw:
+            icon = base64.b64encode(raw.read())
+	main_menu_window = sg.Window(
+									 title='Neur - A Net Creation Tool',
+									 default_element_size=(40, 1),
+									 layout=await gui_layouts('main menu'),
+									 finalize=True,
+									 icon=icon
+								)
+
 	while not exit_value:
 		event, values = main_menu_window.Read()
 
