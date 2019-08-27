@@ -186,7 +186,7 @@ async def events_loop(layouts_list):
 							file_save_name = f'Neur trained net {time_stamp}.dill'
 
 						with open(file_save_name, 'wb') as f:
-							dill.dump(trained_net, file_save_name)
+							dill.dump(trained_net, f)
 
 					else:
 						sg.Popup("Please train a Neural Network before attempting to save.")
