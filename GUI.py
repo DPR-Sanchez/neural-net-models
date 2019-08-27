@@ -182,7 +182,7 @@ async def events_loop(layouts_list):
 						if values[8] != 'Select trained neural net >>':
 							file_save_name = f'{values[8]}.dill'
 						else:
-							time_stamp = re.sub('(,|\.|:,\-,\s)', '', str(datetime.datetime.now()))
+							time_stamp = re.sub('([,\.:\-\s])', '', str(datetime.datetime.now()))
 							f'Neur trained net {time_stamp}.dill'
 
 						with open(file_save_name, 'wb') as f:
