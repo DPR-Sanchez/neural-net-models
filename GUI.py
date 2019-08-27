@@ -7,6 +7,7 @@ import dill
 import matplotlib.pyplot as plt
 import PySimpleGUI as sg
 import os
+import re
 
 
 async def gui_layouts(layout):
@@ -167,7 +168,7 @@ async def events_loop(layouts_list):
 							general_training_window.Element('accuracy').Update(f'training accuracy: {accuracy}')
 
 							file_name = values[6].split('/')[-1]
-							
+
 							general_training_window.Element('training dataset').Update(f'training dataset: {file_name}')
 							general_training_window.Refresh()
 
@@ -178,9 +179,11 @@ async def events_loop(layouts_list):
 						sg.Popup("Please select a csv based dataset")
 				elif event == 'Save Net':
 					if trained_net != None:
-						file_save_name = f'{values[8]}.dill' if \
-							values[8] != 'Select trained neural net >>' else \
-							f"Neur trained net {str(datetime.datetime.now()).replace(':','').replace('-','').replace(' ','').replace('.','')}.dill"
+						if values[8] != 'Select trained neural net >>':
+							file_save_name = f'{values[8]}.dill'
+						else:
+							time_stamp = re.sub('(,|\.|:,\-,\s)', '', str(datetime.datetime.now()))
+							f'Neur trained net {time_stamp}.dill'
 
 						with open(file_save_name, 'wb') as f:
 							dill.dump(trained_net, f)
