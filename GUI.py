@@ -30,7 +30,7 @@ async def gui_layouts(layout):
 			[sg.InputCombo(COST_FUNCTION_NAMES, size=(20, 3)),sg.InputCombo(NETWORK_MODELS, size=(20, 3)), sg.Input(default_text='100', size=(20, 3))],
 			[sg.Text('numpy seed:'), sg.T(' ' * 12), sg.Text('tensorflow  seed:'), sg.T(' ' * 8),sg.Text('rand seed:')],
 			[sg.Input(default_text='614', size=(20, 3)),sg.Input(default_text='1234', size=(20, 3)), sg.Input(default_text='2', size=(20, 3))],
-			[sg.Text('training accuracy: ', size=(19, 1), key='accuracy'),
+			[sg.Text('training accuracy: ', size=(21, 1), key='accuracy'),
 			 	sg.Text('training dataset: ', size=(30, 1),key='training dataset')],
 			[sg.Text('_' * 80)],
 			[sg.Text('Choose your desired dataset that you would like to predict or train on', size=(60, 1))],
@@ -84,7 +84,7 @@ async def gui_layouts(layout):
 async def events_loop(layouts_list):
 	exit_value = False
 	main_menu_window = sg.Window('Neur - A Net Creation Tool', default_element_size=(40, 1)).Layout(await gui_layouts('main menu'))
-
+	main_menu_window.SetIcon(icon='Neur_Icon_256.ico')
 	while not exit_value:
 		event, values = main_menu_window.Read()
 
