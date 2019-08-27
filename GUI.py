@@ -179,14 +179,14 @@ async def events_loop(layouts_list):
 						sg.Popup("Please select a csv based dataset")
 				elif event == 'Save Net':
 					if trained_net != None:
-						if values[8] != 'Select trained neural net >>':
+						if values[8] != 'Select save location >>':
 							file_save_name = f'{values[8]}.dill'
 						else:
 							time_stamp = re.sub('([,\.:\-\s])', '', str(datetime.datetime.now()))
-							f'Neur trained net {time_stamp}.dill'
+							file_save_name = f'Neur trained net {time_stamp}.dill'
 
 						with open(file_save_name, 'wb') as f:
-							dill.dump(trained_net, f)
+							dill.dump(trained_net, file_save_name)
 
 					else:
 						sg.Popup("Please train a Neural Network before attempting to save.")
