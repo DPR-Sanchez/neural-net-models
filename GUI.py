@@ -1,12 +1,12 @@
 import CONSTANTS
+import models_training
 
+import asyncio
 import datetime
 import dill
-import models_training
-import PySimpleGUI as sg
-import asyncio
 import matplotlib.pyplot as plt
-
+import PySimpleGUI as sg
+import os
 
 
 async def gui_layouts(layout):
@@ -24,21 +24,13 @@ async def gui_layouts(layout):
 		NETWORK_MODELS, COST_FUNCTION_NAMES, COST_FUNCTION_VALUES  = CONSTANTS.NEUR_CONSTANTS().get_constants_tuple()
 
 		general_training_layout = [
-			[sg.T(' ')],
-			[sg.Button('Predict'), sg.Button('Train'),sg.Button('Show training history'),
-			 sg.Text('Cost function for Training:')],
-			[sg.T(' ' * 60), sg.InputCombo(COST_FUNCTION_NAMES, size=(20, 3))],
-			[sg.Text('training accuracy: '),sg.T(' ' * 20), sg.Text('net model:')],
-			[sg.T(' ' * 60), sg.InputCombo(NETWORK_MODELS, size=(20, 3))],
-			[sg.T(' ' * 60), sg.Text('epoch training period:')],
-			[sg.T(' ' * 60), sg.Input(default_text='100', size=(20, 3))],
-			[sg.T(' ' * 60), sg.Text('numpy seed:')],
-			[sg.T(' ' * 60), sg.Input(default_text='614', size=(20, 3))],
-			[sg.T(' ' * 60), sg.Text('tensorflow  seed:')],
-			[sg.T(' ' * 60), sg.Input(default_text='1234', size=(20, 3))],
-			[sg.T(' ' * 60), sg.Text('rand seed:')],
-			[sg.T(' ' * 60), sg.Input(default_text='2', size=(20, 3))],
-			[sg.T(' ' * 60), sg.Text('uploaded dataset: ')],
+			[sg.Button('Predict'), sg.Button('Train'),sg.Button('Show training history'),sg.Text(' '*4)],
+			[sg.Text('Cost function for Training:'), sg.T(' ' * 2), sg.Text('net model:'), sg.T(' ' * 22),sg.Text('epoch training period:')],
+			[sg.InputCombo(COST_FUNCTION_NAMES, size=(20, 3)),sg.InputCombo(NETWORK_MODELS, size=(20, 3)), sg.Input(default_text='100', size=(20, 3))],
+			[sg.Text('numpy seed:'), sg.T(' ' * 12), sg.Text('tensorflow  seed:'), sg.T(' ' * 8),sg.Text('rand seed:')],
+			[sg.Input(default_text='614', size=(20, 3)),sg.Input(default_text='1234', size=(20, 3)), sg.Input(default_text='2', size=(20, 3))],
+			[sg.Text('training accuracy: ', size=(19, 1), key='accuracy'),
+			 	sg.Text('training dataset: ', size=(30, 1),key='training dataset')],
 			[sg.Text('_' * 80)],
 			[sg.Text('Choose your desired dataset that you would like to predict or train on', size=(60, 1))],
 			[sg.Text('Dataset:', size=(15, 1), auto_size_text=False, justification='right'),
@@ -172,6 +164,12 @@ async def events_loop(layouts_list):
 																				network_select=values[1], loss_function=selected_loss_function,
 																				epochs_count=values[2]
 																				)
+							general_training_window.Element('accuracy').Update(f'training accuracy: {accuracy}')
+
+							file_name = values[6].split('/')[-1]
+							
+							general_training_window.Element('training dataset').Update(f'training dataset: {file_name}')
+							general_training_window.Refresh()
 
 
 						else:
