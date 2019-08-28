@@ -81,18 +81,41 @@ async def gui_layouts(layout):
 	return None
 
 
+async def windows(win='main'):
+
+	if False == any([x for x in ['main', 'general', 'deepwatch']]):
+		win = 'main'
+	if win=='main':
+		try:
+			#check for existance of windows.icon
+			type(windows.icon)
+		except Exception as e:
+			#makes windows.icon exist if it did not prior
+			with open('Neur_Icon_256.png', 'rb') as raw:
+				windows.icon = base64.b64encode(raw.read())
+		return sg.Window(
+							title='Neur - A Net Creation Tool',
+							default_element_size=(40, 1),
+							layout=await gui_layouts('main menu'),
+							finalize=True,
+							icon=windows.icon
+						)
+	elif win == 'general':
+		return sg.Window(
+							'Neur - A Net Creation Tool',
+							default_element_size=(40, 1)
+						).Layout(await gui_layouts('general'))
+
+	elif win == 'deepwatch':
+		return sg.Window(
+							'Neur - A Net Creation Tool',
+							default_element_size=(40, 1)
+						).Layout(await gui_layouts('deep watch'))
 
 async def events_loop(layouts_list):
 	exit_value = False
-	with open('Neur_Icon_256.png', 'rb') as raw:
-            icon = base64.b64encode(raw.read())
-	main_menu_window = sg.Window(
-									 title='Neur - A Net Creation Tool',
-									 default_element_size=(40, 1),
-									 layout=await gui_layouts('main menu'),
-									 finalize=True,
-									 icon=icon
-								)
+
+	main_menu_window = await windows('main')
 
 	while not exit_value:
 		event, values = main_menu_window.Read()
@@ -103,11 +126,8 @@ async def events_loop(layouts_list):
 			with open('deepwatch.dill', 'rb') as file:
 				network = dill.load(file)
 
-
-
-
 			main_menu_window.Close()
-			deepwatch_window = sg.Window('Neur - A Net Creation Tool', default_element_size=(40, 1)).Layout(await gui_layouts('deep watch'))
+			deepwatch_window = await windows('deepwatch')
 
 			character_roster, level_of_play, map = CONSTANTS.DEEPWATCH_CONSTANTS().get_constants_tuple()
 
@@ -115,7 +135,6 @@ async def events_loop(layouts_list):
 			hero_index = {character_roster[x]: x for x in range(0, len(character_roster))}
 			map_index = {map[x]: x for x in range(len(map))}
 			level_index = {level_of_play[x]: x for x in range(len(level_of_play))}
-
 
 			deepwatch_window_close = False
 			while not exit_value | deepwatch_window_close:
@@ -133,17 +152,13 @@ async def events_loop(layouts_list):
 					deepwatch_window.Element('change').Update('Win' if pred[0][0] > 0.0 else 'Loss')
 				elif event == 'Back':
 
-					main_menu_window = sg.Window(
-													'Neur - A Net Creation Tool',
-													default_element_size=(40, 1)).Layout(await gui_layouts('main menu')
-												)
+					main_menu_window = await windows('main')
 					deepwatch_window.Close()
 					deepwatch_window_close = True
 
 		elif event == 'General Training':
 			main_menu_window.Close()
-			general_training_window = sg.Window('Neur - A Net Creation Tool', default_element_size=(40, 1)).Layout(
-				await gui_layouts('general'))
+			general_training_window = await windows('general')
 
 			trained_net = None
 			optimizer = None
@@ -259,10 +274,7 @@ async def events_loop(layouts_list):
 
 				elif event == 'Back':
 
-					main_menu_window = sg.Window(
-													'Neur - A Net Creation Tool',
-													default_element_size=(40, 1)
-												).Layout(await gui_layouts('main menu'))
+					main_menu_window = await windows('main')
 
 					general_training_window.Close()
 					general_window_close = True
