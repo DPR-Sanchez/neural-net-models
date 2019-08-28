@@ -37,6 +37,7 @@ async def gui_layouts(layout):
 			[sg.Text('Choose your desired dataset that you would like to predict or train on', size=(60, 1))],
 			[sg.Text('Dataset:', size=(15, 1), auto_size_text=False, justification='right'),
 			 sg.InputText('Select dataset >>'), sg.FileBrowse()],
+			[sg.Checkbox(': dataset first column (left) is index ', default=True)],
 			[sg.Text('select a trained neural network you would like to load', size=(60, 1))],
 			[sg.Text('trained net:', size=(15, 1), auto_size_text=False, justification='right'),
 			 sg.InputText('Select trained neural net >>'), sg.FileBrowse()],
@@ -206,8 +207,8 @@ async def events_loop(layouts_list):
 						sg.Popup("Please select a csv based dataset")
 				elif event == 'Save Net':
 					if trained_net != None:
-						if values[8] != 'Select save location >>':
-							file_save_name = f'{values[8]}.dill'
+						if values[9] != 'Select save location >>':
+							file_save_name = f'{values[9]}.dill'
 						else:
 							time_stamp = re.sub('([,\.:\-\s])', '', str(datetime.datetime.now()))
 							file_save_name = f'Neur trained net {time_stamp}.dill'
@@ -244,7 +245,7 @@ async def events_loop(layouts_list):
 					else:
 						sg.Popup("Please train or load a neural net.")
 				elif event == 'Load Net':
-					if values[7]!= 'Select trained neural net >>':
+					if values[8]!= 'Select trained neural net >>':
 
 						load_pickle_confirm_layout = [
 							[sg.Text('Loading pickle based objects can pose a security risk.', size=(40, 1), auto_size_text=False, justification='center')],
@@ -260,7 +261,7 @@ async def events_loop(layouts_list):
 						event, _ = confirm_window.Read()
 
 						if event == 'Yes':
-							file_load_name = values[7]
+							file_load_name = values[8]
 							try:
 								with open(file_load_name, 'rb') as f:
 									trained_net = dill.load(f)
