@@ -97,20 +97,23 @@ async def windows(win='main'):
 							title='Neur - A Net Creation Tool',
 							default_element_size=(40, 1),
 							layout=await gui_layouts('main menu'),
-							finalize=True,
 							icon=windows.icon
 						)
 	elif win == 'general':
 		return sg.Window(
-							'Neur - A Net Creation Tool',
-							default_element_size=(40, 1)
-						).Layout(await gui_layouts('general'))
+							title='Neur - A Net Creation Tool',
+							default_element_size=(40, 1),
+							layout=await gui_layouts('general'),
+							icon=windows.icon
+						)
 
 	elif win == 'deepwatch':
 		return sg.Window(
-							'Neur - A Net Creation Tool',
-							default_element_size=(40, 1)
-						).Layout(await gui_layouts('deep watch'))
+							title='Neur - A Net Creation Tool',
+							default_element_size=(40, 1),
+							layout=await gui_layouts('deep watch'),
+							icon=windows.icon
+						)
 
 async def events_loop(layouts_list):
 	exit_value = False
