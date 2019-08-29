@@ -191,7 +191,7 @@ async def events_loop(layouts_list):
 							optimizer,trained_net,accuracy = models_training.train_model(numpy_seed=values[2], tensor_seed=values[3],
 																				ran_seed=values[4], data_source=values[6],
 																				network_select=values[1], loss_function=selected_loss_function,
-																				epochs_count=values[2]
+																				epochs_count=values[2], index=values[7]
 																				)
 							general_training_window.Element('accuracy').Update(f'training accuracy: {accuracy}')
 

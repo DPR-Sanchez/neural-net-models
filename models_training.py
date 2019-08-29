@@ -16,7 +16,8 @@ def train_model(
 					data_source='training.csv',
 					network_select='sequential 1',
 					loss_function='binary_crossentropy',
-					epochs_count=10
+					epochs_count=10,
+					index=True
 				):
 
 	#datasource should be the string path to data csv
@@ -30,8 +31,11 @@ def train_model(
 	keras.backend.set_session(sess)
 
 	# Split lines into examples and labels
-	examples = training_set[:, :-1]
+
+	examples = training_set[:, 1:-1] if index else training_set[:, :-1]
 	labels = training_set[:, -1:]
+
+
 
 	# takes size of second dimension which is the features count of the example set
 	input_size = np.size(examples, 1)
