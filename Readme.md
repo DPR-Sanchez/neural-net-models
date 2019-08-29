@@ -1,5 +1,5 @@
-
-##Neur ![alttext](https://github.com/DPR-Sanchez/neural-net-models/blob/dev/Neur_Icon_256.png)
+![alttext](https://github.com/DPR-Sanchez/neural-net-models/blob/dev/Neur_Icon_64.png)
+##Neur 
 A neural network training and utilization tool
 
 ####Dependencies
