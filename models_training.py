@@ -9,9 +9,13 @@ import numpy as np
 import tensorflow as tf
 
 
-def fetch_data_source(data_source:str, index:bool,dataset=False):
+def fetch_data_source(data_source:str, index:bool,dataset=False,headers=False):
 	# data_source should be the string path to data csv
 	training_set = np.genfromtxt(data_source, delimiter=',')
+
+	#remove headers if present
+	if headers:
+		training_set = training_set[1:]
 
 	# Split lines into examples and labels
 	examples = training_set[:, 1:-1] if index else training_set[:, :-1]
@@ -23,7 +27,7 @@ def fetch_data_source(data_source:str, index:bool,dataset=False):
 		return examples,labels
 
 
-def prediction(optimizer,samples=[],labels=[],mode='',data_source='',index=False,save_location=''):
+def prediction(optimizer,samples=[],labels=[],mode='',data_source='',index=False,save_location='',headers=False):
 
 	if mode == 'accuracy':
 		prediction = [1 if i > .5 else 0 for i in optimizer.predict(samples)]
@@ -31,7 +35,7 @@ def prediction(optimizer,samples=[],labels=[],mode='',data_source='',index=False
 			prediction)
 		return f'{accuracy * 100:.2f}%'
 	else:
-		dataset, samples = fetch_data_source(data_source,index,dataset=True)
+		dataset, samples = fetch_data_source(data_source,index,dataset=True,headers=headers)
 		opt_results = optimizer.predict(samples)
 		output = np.append(dataset, opt_results, axis=1)
 		np.savetxt(f'{save_location}.csv', output , fmt="%d", delimiter=",")
@@ -44,9 +48,10 @@ def train_model(
 					network_select='sequential 1',
 					loss_function='binary_crossentropy',
 					epochs_count=10,
-					index=True
+					index=True,
+					headers = False
 				):
-	examples, labels = (preprocessing.normalize(data) for data in fetch_data_source(data_source, index))
+	examples, labels = (preprocessing.normalize(data) for data in fetch_data_source(data_source, index,headers=headers))
 	np.random.seed(numpy_seed)
 	seed(ran_seed)
 	session_conf = tf.ConfigProto(intra_op_parallelism_threads=1, 	inter_op_parallelism_threads=1)

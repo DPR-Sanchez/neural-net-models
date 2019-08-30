@@ -194,7 +194,7 @@ async def events_loop(layouts_list):
 							optimizer,trained_net,accuracy = models_training.train_model(numpy_seed=values[2], tensor_seed=values[3],
 																				ran_seed=values[4], data_source=values[6],
 																				network_select=values[1], loss_function=selected_loss_function,
-																				epochs_count=values[2], index=values[7]
+																				epochs_count=values[2], index=values[7],headers=values[8]
 																				)
 							general_training_window.Element('accuracy').Update(f'training accuracy: {accuracy}')
 
@@ -280,7 +280,7 @@ async def events_loop(layouts_list):
 					if values[6] != 'Select dataset >>' and values[6][-3:] == 'csv':
 						if optimizer is not None:
 							if values[11] != 'Select save location >>':
-								models_training.prediction(optimizer, data_source=values[6], index=values[7],save_location=values[11])
+								models_training.prediction(optimizer, data_source=values[6], index=values[7],save_location=values[11],headers=values[8])
 							else:
 								sg.Popup("Please select a location to save the prediction to.")
 						else:
