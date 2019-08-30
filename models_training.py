@@ -46,7 +46,7 @@ def train_model(
 					epochs_count=10,
 					index=True
 				):
-	examples, labels = fetch_data_source(data_source, index)
+	examples, labels = (preprocessing.normalize(data) for data in fetch_data_source(data_source, index))
 	np.random.seed(numpy_seed)
 	seed(ran_seed)
 	session_conf = tf.ConfigProto(intra_op_parallelism_threads=1, 	inter_op_parallelism_threads=1)
@@ -59,8 +59,6 @@ def train_model(
 
 	# Divide dataset into training and test (60% training and 40% test)
 	training_examples, validation_examples, training_labels, validation_labels = train_test_split(examples, labels, test_size=0.4)
-	training_examples = preprocessing.normalize(training_examples)
-	validation_examples = preprocessing.normalize(validation_examples)
 
 	# model 1
 	sequential_net_one = join(
