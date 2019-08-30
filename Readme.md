@@ -13,4 +13,15 @@ A neural network training and utilization tool
 ####Installing
 
 ####Getting Started
+![alttext](https://github.com/DPR-Sanchez/neural-net-models/blob/dev/training_main_window_screen_shot.png)
+
+On launch, choose either General Training or Deepwatch.
+
+######General Training:
+![alttext](https://github.com/DPR-Sanchez/neural-net-models/blob/dev/training_general_training_window_screen_shot.png)
+
+######Deepwatch:
+![alttext](https://github.com/DPR-Sanchez/neural-net-models/blob/dev/training_deepwatch_window_screen_shot.png)
+
+
 
