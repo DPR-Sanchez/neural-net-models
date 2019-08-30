@@ -44,6 +44,9 @@ async def gui_layouts(layout):
 			[sg.Text('Save trained network:', size=(35, 1))],
 			[sg.Text('save location:', size=(15, 1), auto_size_text=False, justification='right'),
 			 sg.InputText('Select save location >>'), sg.FileSaveAs()],
+			[sg.Text('Save prediction:', size=(35, 1))],
+			[sg.Text('save location:', size=(15, 1), auto_size_text=False, justification='right'),
+			 sg.InputText('Select save location >>'), sg.FileSaveAs()],
 
 			[sg.Submit(), sg.Button('Load Net'), sg.Button('Save Net'), sg.Button('Back'), sg.Button('Exit')]
 		]
@@ -274,8 +277,16 @@ async def events_loop(layouts_list):
 					else:
 						sg.Popup("Please select trained neural net to load")
 				elif event == 'Predict':
-					pass
-
+					if values[6] != 'Select dataset >>' and values[6][-3:] == 'csv':
+						if optimizer is not None:
+							if values[10] != 'Select save location >>':
+								models_training.prediction(optimizer, data_source=values[6], index=values[7],save_location=values[10])
+							else:
+								sg.Popup("Please select a location to save the prediction to.")
+						else:
+							sg.Popup("Please either load or train a Neural Network")
+					else:
+						sg.Popup("Please select a csv based dataset")
 				elif event == 'Back':
 
 					main_menu_window = await windows('main')

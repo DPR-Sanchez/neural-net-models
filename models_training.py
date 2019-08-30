@@ -9,6 +9,33 @@ import numpy as np
 import tensorflow as tf
 
 
+def fetch_data_source(data_source:str, index:bool,dataset=False):
+	# data_source should be the string path to data csv
+	training_set = np.genfromtxt(data_source, delimiter=',')
+
+	# Split lines into examples and labels
+	examples = training_set[:, 1:-1] if index else training_set[:, :-1]
+	labels = training_set[:, -1:]
+
+	if dataset:
+		return training_set, examples
+	else:
+		return examples,labels
+
+
+def prediction(optimizer,samples=[],labels=[],mode='',data_source='',index=False,save_location=''):
+
+	if mode == 'accuracy':
+		prediction = [1 if i > .5 else 0 for i in optimizer.predict(samples)]
+		accuracy = [1 if prediction[i] == labels[i] else 0 for i in range(len(prediction))].count(1) / len(
+			prediction)
+		return f'{accuracy * 100:.2f}%'
+	else:
+		dataset, samples = fetch_data_source(data_source,index,dataset=True)
+		opt_results = optimizer.predict(samples)
+		output = np.append(dataset, opt_results, axis=1)
+		np.savetxt(f'{save_location}.csv', output , fmt="%d", delimiter=",")
+
 def train_model(
 					numpy_seed=614,
 					tensor_seed=1234,
@@ -19,31 +46,21 @@ def train_model(
 					epochs_count=10,
 					index=True
 				):
-
-	#datasource should be the string path to data csv
-	training_set = np.genfromtxt(data_source, delimiter=',')
+	examples, labels = fetch_data_source(data_source, index)
 	np.random.seed(numpy_seed)
 	seed(ran_seed)
-	session_conf = tf.ConfigProto(intra_op_parallelism_threads=1,
-								  inter_op_parallelism_threads=1)
+	session_conf = tf.ConfigProto(intra_op_parallelism_threads=1, 	inter_op_parallelism_threads=1)
 	tf.set_random_seed(tensor_seed)
 	sess = tf.Session(graph=tf.get_default_graph(), config=session_conf)
 	keras.backend.set_session(sess)
-
-	# Split lines into examples and labels
-
-	examples = training_set[:, 1:-1] if index else training_set[:, :-1]
-	labels = training_set[:, -1:]
-
-
 
 	# takes size of second dimension which is the features count of the example set
 	input_size = np.size(examples, 1)
 
 	# Divide dataset into training and test (60% training and 40% test)
-	training_examples, test_examples, training_labels, test_labels = train_test_split(examples, labels, test_size=0.4)
+	training_examples, validation_examples, training_labels, validation_labels = train_test_split(examples, labels, test_size=0.4)
 	training_examples = preprocessing.normalize(training_examples)
-	test_examples = preprocessing.normalize(test_examples)
+	validation_examples = preprocessing.normalize(validation_examples)
 
 	# model 1
 	sequential_net_one = join(
@@ -101,11 +118,7 @@ def train_model(
 		regularizer=algorithms.l2(0.001)
 	)
 
-	optimizer.train(training_examples, training_labels, test_examples, test_labels, epochs=epochs_count)
-
-	pred = [1 if i > 0 else 0 for i in optimizer.predict(test_examples)]
-
-	accuracy = [1 if pred[i] == test_labels[i] else 0 for i in range(len(pred))].count(1) / len(pred)
-	accuracy = f'{accuracy * 100:.2f}%'
+	optimizer.train(training_examples, training_labels, validation_examples, validation_labels, epochs=epochs_count)
+	accuracy = prediction(optimizer,validation_examples,validation_labels,'accuracy')
 
 	return (optimizer,network,accuracy)
