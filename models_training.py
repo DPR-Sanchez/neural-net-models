@@ -1,11 +1,13 @@
+from random import seed
+import csv
+
 from neupy.layers import *
 from neupy import algorithms
-from random import seed
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 from tensorflow import keras
-
 import numpy as np
+import pandas as pd
 import tensorflow as tf
 
 
@@ -27,18 +29,28 @@ def fetch_data_source(data_source:str, index:bool,dataset=False,headers=False):
 		return examples,labels
 
 
-def prediction(optimizer,samples=[],labels=[],mode='',data_source='',index=False,save_location='',headers=False):
+def prediction(network, samples=[], labels=[], mode='', data_source='', index=False, save_location='', headers=False):
 
 	if mode == 'accuracy':
-		prediction = [1 if i > .5 else 0 for i in optimizer.predict(samples)]
+		prediction = [1 if i > .5 else 0 for i in network.predict(samples)]
 		accuracy = [1 if prediction[i] == labels[i] else 0 for i in range(len(prediction))].count(1) / len(
 			prediction)
 		return f'{accuracy * 100:.2f}%'
 	else:
 		dataset, samples = fetch_data_source(data_source,index,dataset=True,headers=headers)
-		opt_results = optimizer.predict(samples)
+		opt_results = network.predict(samples)
 		output = np.append(dataset, opt_results, axis=1)
-		np.savetxt(f'{save_location}.csv', output , fmt="%d", delimiter=",")
+
+		if headers:
+			with open(data_source, 'r') as infile:
+				reader = csv.DictReader(infile)
+				fieldnames = reader.fieldnames
+
+			fieldnames.append('prediction')
+			df = pd.DataFrame(output)  # A is a numpy 2d array
+			df.to_csv(f'{save_location}.csv', header=fieldnames, index=False)
+		else:
+			np.savetxt(f'{save_location}.csv', output , fmt="%d", delimiter=",")
 
 def train_model(
 					numpy_seed=614,
