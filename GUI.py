@@ -278,9 +278,9 @@ async def events_loop(layouts_list):
 						sg.Popup("Please select trained neural net to load")
 				elif event == 'Predict':
 					if values[6] != 'Select dataset >>' and values[6][-3:] == 'csv':
-						if optimizer is not None:
+						if trained_net is not None:
 							if values[11] != 'Select save location >>':
-								models_training.prediction(optimizer, data_source=values[6], index=values[7],save_location=values[11],headers=values[8])
+								models_training.prediction(trained_net, data_source=values[6], index=values[7],save_location=values[11],headers=values[8])
 							else:
 								sg.Popup("Please select a location to save the prediction to.")
 						else:
