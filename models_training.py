@@ -33,7 +33,7 @@ def prediction(network, samples=[], labels=[], mode='', data_source='', index=Fa
 
 	if mode == 'accuracy':
 		prediction = network.predict(samples)
-		prediction_average = (max(prediction)+min(prediction))/2
+		prediction_average = (prediction.max()+prediction.min())/2
 		prediction = [1 if i > prediction_average else 0 for i in network.predict(samples)]
 		accuracy = [1 if prediction[i] == labels[i] else 0 for i in range(len(prediction))].count(1) / len(
 			prediction)
