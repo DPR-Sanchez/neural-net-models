@@ -32,10 +32,13 @@ def fetch_data_source(data_source:str, index:bool,dataset=False,headers=False):
 def prediction(network, samples=[], labels=[], mode='', data_source='', index=False, save_location='', headers=False):
 
 	if mode == 'accuracy':
-		prediction = [1 if i > .5 else 0 for i in network.predict(samples)]
+		prediction = network.predict(samples)
+		prediction_average = (max(prediction)+min(prediction))/2
+		prediction = [1 if i > prediction_average else 0 for i in network.predict(samples)]
 		accuracy = [1 if prediction[i] == labels[i] else 0 for i in range(len(prediction))].count(1) / len(
 			prediction)
 		return f'{accuracy * 100:.2f}%'
+
 	else:
 		dataset, samples = fetch_data_source(data_source,index,dataset=True,headers=headers)
 		opt_results = network.predict(samples)
