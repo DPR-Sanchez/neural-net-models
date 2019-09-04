@@ -250,7 +250,15 @@ async def events_loop(layouts_list):
 				elif event == 'Aux. Test':
 					if values[6] != 'Select dataset >>' and values[6][-3:] == 'csv':
 						if trained_net is not None:
-							models_training.prediction(trained_net, mode='accuracy',data_source=values[6], index=values[7], headers=values[8])
+							accuracy = models_training.prediction(
+																	trained_net,
+																	mode='accuracy',
+																	data_source=values[6],
+																	index=values[7],
+																	headers=values[8]
+																)
+							general_training_window.Element('accuracy').Update(f'training accuracy: {accuracy}')
+							general_training_window.Refresh()
 						else:
 							sg.Popup("Please either load or train a Neural Network")
 					else:
