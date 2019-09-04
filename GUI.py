@@ -250,11 +250,7 @@ async def events_loop(layouts_list):
 				elif event == 'Aux. Test':
 					if values[6] != 'Select dataset >>' and values[6][-3:] == 'csv':
 						if trained_net is not None:
-							if values[11] != 'Select save location >>':
-								models_training.prediction(trained_net, data_source=values[6], index=values[7],
-														   save_location=values[11], headers=values[8])
-							else:
-								sg.Popup("Please select a location to save the prediction to.")
+							models_training.prediction(trained_net, mode='accuracy',data_source=values[6], index=values[7], headers=values[8])
 						else:
 							sg.Popup("Please either load or train a Neural Network")
 					else:
