@@ -258,6 +258,10 @@ async def events_loop(layouts_list):
 																	headers=values[8]
 																)
 							general_training_window.Element('accuracy').Update(f'training accuracy: {accuracy}')
+
+							file_name = values[6].split('/')[-1]
+							general_training_window.Element('training dataset').Update(f'training dataset: {file_name}')
+
 							general_training_window.Refresh()
 						else:
 							sg.Popup("Please either load or train a Neural Network")
