@@ -32,6 +32,8 @@ def fetch_data_source(data_source:str, index:bool,dataset=False,headers=False):
 def prediction(network, samples=[], labels=[], mode='', data_source='', index=False, save_location='', headers=False):
 
 	if mode == 'accuracy':
+		if data_source != '':
+			samples, labels = fetch_data_source(data_source, index, headers=headers)
 		prediction = network.predict(samples)
 		prediction_average = (prediction.max()+prediction.min())/2
 		prediction = [1 if i > prediction_average else 0 for i in network.predict(samples)]
