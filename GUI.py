@@ -26,7 +26,7 @@ async def gui_layouts(layout):
 		NETWORK_MODELS, COST_FUNCTION_NAMES, COST_FUNCTION_VALUES  = CONSTANTS.NEUR_CONSTANTS().get_constants_tuple()
 
 		general_training_layout = [
-			[sg.Button('Predict'), sg.Button('Train'),sg.Button('Show training history'),sg.Text(' '*4)],
+			[sg.Button('Predict'), sg.Button('Train'),sg.Button('Show training history'),sg.Button('Aux. Test')],
 			[sg.Text('Cost function for Training:'), sg.T(' ' * 2), sg.Text('net model:'), sg.T(' ' * 22),sg.Text('epoch training period:')],
 			[sg.InputCombo(COST_FUNCTION_NAMES, size=(20, 3)),sg.InputCombo(NETWORK_MODELS, size=(20, 3)), sg.Input(default_text='100', size=(20, 3))],
 			[sg.Text('numpy seed:'), sg.T(' ' * 12), sg.Text('tensorflow  seed:'), sg.T(' ' * 8),sg.Text('rand seed:')],
@@ -208,24 +208,25 @@ async def events_loop(layouts_list):
 							sg.Popup("Please verify that all seed value inputs are integers")
 					else:
 						sg.Popup("Please select a csv based dataset")
-				elif event == 'Save Net':
-					if trained_net != None:
-						if values[10] != 'Select save location >>':
-							file_save_name = f'{values[10]}.dill'
+
+
+				elif event == 'Predict':
+					if values[6] != 'Select dataset >>' and values[6][-3:] == 'csv':
+						if trained_net is not None:
+							if values[11] != 'Select save location >>':
+								models_training.prediction(trained_net, data_source=values[6], index=values[7],save_location=values[11],headers=values[8])
+							else:
+								sg.Popup("Please select a location to save the prediction to.")
 						else:
-							time_stamp = re.sub('([,\.:\-\s])', '', str(datetime.datetime.now()))
-							file_save_name = f'Neur trained net {time_stamp}.dill'
-
-						with open(file_save_name, 'wb') as f:
-							dill.dump(trained_net, f)
-
+							sg.Popup("Please either load or train a Neural Network")
 					else:
-						sg.Popup("Please train a Neural Network before attempting to save.")
+						sg.Popup("Please select a csv based dataset")
+
 				elif event == 'Show training history':
 					if optimizer != None:
 
-						#try:
-						#optimizer.plot_errors()
+						# try:
+						# optimizer.plot_errors()
 						optimizer.plot_errors(show=False)
 						plt.savefig('training_history.png')
 						image_elem = sg.Image(filename='training_history.png')
@@ -244,9 +245,27 @@ async def events_loop(layouts_list):
 						if event == 'Back':
 							display_training_window.Close()
 
-
 					else:
 						sg.Popup("Please train or load a neural net.")
+
+
+				elif event == 'Aux. Test':
+					pass
+
+				elif event == 'Save Net':
+					if trained_net != None:
+						if values[10] != 'Select save location >>':
+							file_save_name = f'{values[10]}.dill'
+						else:
+							time_stamp = re.sub('([,\.:\-\s])', '', str(datetime.datetime.now()))
+							file_save_name = f'Neur trained net {time_stamp}.dill'
+
+						with open(file_save_name, 'wb') as f:
+							dill.dump(trained_net, f)
+
+					else:
+						sg.Popup("Please train a Neural Network before attempting to save.")
+
 				elif event == 'Load Net':
 					if values[9]!= 'Select trained neural net >>':
 
@@ -276,17 +295,7 @@ async def events_loop(layouts_list):
 							confirm_window.Close()
 					else:
 						sg.Popup("Please select trained neural net to load")
-				elif event == 'Predict':
-					if values[6] != 'Select dataset >>' and values[6][-3:] == 'csv':
-						if trained_net is not None:
-							if values[11] != 'Select save location >>':
-								models_training.prediction(trained_net, data_source=values[6], index=values[7],save_location=values[11],headers=values[8])
-							else:
-								sg.Popup("Please select a location to save the prediction to.")
-						else:
-							sg.Popup("Please either load or train a Neural Network")
-					else:
-						sg.Popup("Please select a csv based dataset")
+
 				elif event == 'Back':
 
 					main_menu_window = await windows('main')
