@@ -6,6 +6,7 @@ A neural network training and utilization tool
 #### Dependencies
 
 * [Neupy](https://github.com/itdxer/neupy)
+* [Pandas 0.24.0](https://pandas.pydata.org/pandas-docs/stable/whatsnew/index.html#version-0-24)
 * [Numpy](https://github.com/numpy/numpy)
 * [Matplotlib](https://github.com/matplotlib/matplotlib)
 * [dill](https://github.com/uqfoundation/dill)
