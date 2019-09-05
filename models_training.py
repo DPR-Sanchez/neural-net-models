@@ -13,7 +13,7 @@ import tensorflow as tf
 
 def fetch_data_source(data_source:str, index:bool,dataset=False,headers=False):
 	# data_source should be the string path to data csv
-	training_set = np.genfromtxt(data_source, delimiter=',')
+	training_set = pd.read_csv(data_source).to_numpy()
 
 	#remove headers if present
 	if headers:
