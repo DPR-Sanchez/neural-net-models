@@ -173,7 +173,6 @@ async def events_loop(layouts_list):
 			while not exit_value | general_window_close:
 
 				event, values = general_training_window.Read()
-				print(values)
 				if event is None or event == 'Exit':
 					exit_value = True
 					general_training_window.Close()
