@@ -4,4 +4,4 @@ dill
 sklearn
 tensorflow
 numpy
-pandas
+pandas==0.24.0
