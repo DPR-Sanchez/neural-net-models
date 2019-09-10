@@ -118,24 +118,36 @@ def train_model(
 				parsig | partan | parelu | parchain_negative | parchain_zero) >> \
 							   Concatenate() >> Tanh(30) >> Sigmoid(1)
 
-	# model 4
-	parsig_two = Sigmoid(30) >> Sigmoid(30)
-	partan_two = Tanh(30) >> Tanh(30)
-	parelu_two = Elu(30) >> Elu(30)
-	parchain_negative_two = Tanh(30) >> Elu(30)
-	parchain_zero_two = Sigmoid(30) >> Relu(30)
 
-	parralel_funnel_network_relu_out = Input(input_size) >> Linear(30) >> \
+	scale = int(input_size * 1.5)
+
+	parsig_two = Sigmoid(scale) >> Sigmoid(scale)
+	partan_two = Tanh(scale) >> Tanh(scale)
+	parelu_two = Elu(scale) >> Elu(scale)
+	parchain_negative_two = Tanh(scale) >> Elu(scale)
+	parchain_zero_two = Sigmoid(scale) >> Relu(scale)
+
+	# model 4 - partially scales with input
+	parralel_funnel_network_sig_out = Input(input_size) >> Linear(30) >> \
 									   ((parsig | partan | parelu | parchain_negative | parchain_zero)\
 									   |(parsig_two | partan_two | parelu_two)) >> Concatenate() >> \
 									   (parchain_negative_two | parchain_zero_two) >> \
 									   Concatenate() >> Tanh(30) >> Sigmoid(1)
 
+	#model 5 - size scales with input
+	autoscale_funnel_network_sig_out = Input(input_size) >> Linear(scale) >> \
+									   ((parsig | partan | parelu | parchain_negative | parchain_zero) \
+										| (parsig_two | partan_two | parelu_two)) >> Concatenate() >> \
+									   (parchain_negative_two | parchain_zero_two) >> \
+									   Concatenate() >>(Tanh(scale)|Elu(scale))>>Concatenate()>>\
+									   Tanh(scale) >> Sigmoid(1)
+
 	net_select_dict = {
 		'sequential 1':sequential_net_one,
 		'par net relu':parralel_network_relu_out,
 		'par net sig':parralel_network_sig_out,
-		'funnel net':parralel_funnel_network_relu_out
+		'funnel net':parralel_funnel_network_sig_out
+		'scaling funnel net':autoscale_funnel_network_sig_out
 	}
 
 	network = net_select_dict[network_select]
