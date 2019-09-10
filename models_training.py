@@ -126,8 +126,8 @@ def train_model(
 	parchain_zero_two = Sigmoid(30) >> Relu(30)
 
 	parralel_funnel_network_relu_out = Input(input_size) >> Linear(30) >> \
-									   (parsig | partan | parelu | parchain_negative | parchain_zero) >> \
-									   Concatenate() >> (parsig_two | partan_two | parelu_two) >> Concatenate() >> \
+									   ((parsig | partan | parelu | parchain_negative | parchain_zero)\
+									   |(parsig_two | partan_two | parelu_two)) >> Concatenate() >> \
 									   (parchain_negative_two | parchain_zero_two) >> \
 									   Concatenate() >> Tanh(30) >> Sigmoid(1)
 
