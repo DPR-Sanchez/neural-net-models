@@ -5,6 +5,7 @@ from neupy.layers import *
 from neupy import algorithms
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
+from sklearn.utils import check_array
 from tensorflow import keras
 import numpy as np
 import pandas as pd
@@ -13,7 +14,7 @@ import tensorflow as tf
 
 def fetch_data_source(data_source:str, index:bool,dataset=False,headers=False):
 	# data_source should be the string path to data csv
-	training_set = pd.read_csv(data_source).to_numpy()
+	training_set = check_array(pd.read_csv(data_source).to_numpy(),force_all_finite=True)
 
 	#remove headers if present
 	if headers:
