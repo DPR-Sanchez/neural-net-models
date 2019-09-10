@@ -146,7 +146,7 @@ def train_model(
 		'sequential 1':sequential_net_one,
 		'par net relu':parralel_network_relu_out,
 		'par net sig':parralel_network_sig_out,
-		'funnel net':parralel_funnel_network_sig_out
+		'funnel net':parralel_funnel_network_sig_out,
 		'scaling funnel net':autoscale_funnel_network_sig_out
 	}
 
