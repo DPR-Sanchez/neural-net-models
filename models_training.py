@@ -135,12 +135,12 @@ def train_model(
 									   Concatenate() >> Tanh(30) >> Sigmoid(1)
 
 	#model 5 - size scales with input
-	concat_drop = Concatenate>>Dropout(scale,proba=.2)
+	concat_normdrop = Concatenate>>>BatchNorm()>Dropout(proba=.1)
 	autoscale_funnel_network_sig_out = Input(input_size) >> Linear(scale) >> \
 									   ((parsig | partan | parelu | parchain_negative | parchain_zero) \
-										| (parsig_two | partan_two | parelu_two)) >> concat_drop >> \
+										| (parsig_two | partan_two | parelu_two)) >> concat_normdrop >> \
 									   (parchain_negative_two | parchain_zero_two) >> \
-									   concat_drop >>(Tanh(scale)|Elu(scale))>>concat_drop>>\
+									   concat_normdrop >>(Tanh(scale)|Elu(scale))>>concat_normdrop>>\
 									   Tanh(scale) >> Sigmoid(1)
 
 	net_select_dict = {
