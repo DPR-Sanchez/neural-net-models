@@ -119,7 +119,7 @@ def train_model(
 							   Concatenate() >> Tanh(30) >> Sigmoid(1)
 
 
-	scale = int(input_size * 1.5)
+	scale = int(input_size/5 * 1.5)+1
 
 	parsig_two = Sigmoid(scale) >> Sigmoid(scale)
 	partan_two = Tanh(scale) >> Tanh(scale)
@@ -135,11 +135,12 @@ def train_model(
 									   Concatenate() >> Tanh(30) >> Sigmoid(1)
 
 	#model 5 - size scales with input
+	concat_drop = Concatenate>>Dropout(scale,proba=.2)
 	autoscale_funnel_network_sig_out = Input(input_size) >> Linear(scale) >> \
 									   ((parsig | partan | parelu | parchain_negative | parchain_zero) \
-										| (parsig_two | partan_two | parelu_two)) >> Concatenate() >> \
+										| (parsig_two | partan_two | parelu_two)) >> concat_drop >> \
 									   (parchain_negative_two | parchain_zero_two) >> \
-									   Concatenate() >>(Tanh(scale)|Elu(scale))>>Concatenate()>>\
+									   concat_drop >>(Tanh(scale)|Elu(scale))>>concat_drop>>\
 									   Tanh(scale) >> Sigmoid(1)
 
 	net_select_dict = {
@@ -156,10 +157,13 @@ def train_model(
 		network,
 		loss=loss_function,
 		verbose=False,
-		regularizer=algorithms.l2(0.001)
+		regularizer=algorithms.l2(0.001),
+
 	)
 
-	optimizer.train(training_examples, training_labels, validation_examples, validation_labels, epochs=epochs_count)
+	optimizer.train(training_examples, training_labels, validation_examples, validation_labels,shuffle=True, batch_size=256, epochs=epochs_count)
 	accuracy = prediction(optimizer,validation_examples,validation_labels,'accuracy')
+
+
 
 	return (optimizer,network,accuracy)
