@@ -23,7 +23,7 @@ def fetch_data_source(data_source:str, index:bool,dataset=False,headers=False):
 		training_set = check_array(training_set[1:],force_all_finite=True)
 	else:
 		training_set = check_array(training_set,force_all_finite=True)
-
+	training_set = preprocessing.normalize(training_set,axis=0)
 	# Split lines into examples and labels
 	examples = training_set[:, 1:-1] if index else training_set[:, :-1]
 	labels = training_set[:, -1:]
@@ -77,7 +77,7 @@ def train_model(
 					index=True,
 					headers = False
 				):
-	examples, labels = (preprocessing.normalize(data) for data in fetch_data_source(data_source, index,headers=headers))
+	examples, labels = fetch_data_source(data_source, index,headers=headers)
 	np.random.seed(numpy_seed)
 	seed(ran_seed)
 	session_conf = tf.ConfigProto(intra_op_parallelism_threads=1, 	inter_op_parallelism_threads=1)
