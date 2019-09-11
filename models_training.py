@@ -160,10 +160,10 @@ def train_model(
 		loss=loss_function,
 		verbose=False,
 		regularizer=algorithms.l2(0.001),
-
+		shuffle_data=True
 	)
 
-	optimizer.train(training_examples, training_labels, validation_examples, validation_labels,shuffle=True, batch_size=256, epochs=epochs_count)
+	optimizer.train(training_examples, training_labels, validation_examples, validation_labels, batch_size=256, epochs=epochs_count)
 	accuracy = prediction(optimizer,validation_examples,validation_labels,'accuracy')
 
 
