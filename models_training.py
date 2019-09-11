@@ -121,11 +121,11 @@ def train_model(
 
 	scale = int(input_size/5 * 1.5)+1
 
-	parsig_two = Sigmoid(scale) >> Sigmoid(scale)
-	partan_two = Tanh(scale) >> Tanh(scale)
-	parelu_two = Elu(scale) >> Elu(scale)
-	parchain_negative_two = Tanh(scale) >> Elu(scale)
-	parchain_zero_two = Sigmoid(scale) >> Relu(scale)
+	parsig_two = Sigmoid(scale) >> BatchNorm() >> Dropout(proba=.4)>> Sigmoid(scale)
+	partan_two = Tanh(scale) >> BatchNorm() >> Dropout(proba=.4)>> Tanh(scale)
+	parelu_two = Elu(scale) >> BatchNorm() >> Dropout(proba=.4)>> Elu(scale)
+	parchain_negative_two = Tanh(scale) >> BatchNorm() >> Dropout(proba=.4)>> Elu(scale)
+	parchain_zero_two = Sigmoid(scale) >> BatchNorm() >> Dropout(proba=.4)>> Relu(scale)
 
 	# model 4 - partially scales with input
 	parralel_funnel_network_sig_out = Input(input_size) >> Linear(30) >> \
