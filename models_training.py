@@ -151,7 +151,7 @@ def train_model(
 	concat_noisynormdrop_two = Concatenate() >> BatchNorm() >> Dropout(proba=.2) >> GaussianNoise(std=0.1)
 	concat_noisynormdrop_three = Concatenate() >> BatchNorm() >> Dropout(proba=.1) >> GaussianNoise(std=0.1)
 	concat_noisynormdrop_four = Concatenate() >> BatchNorm() >> Dropout(proba=.1) >> GaussianNoise(std=0.1)
-	noisy_para_seq = Input(scale)>>\
+	noisy_para_seq = Input(input_size)>>\
 							Linear(scale)>>\
 						 	(Tanh(scale)|LeakyRelu(scale))>>\
 							concat_noisynormdrop_one>>\
