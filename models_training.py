@@ -156,12 +156,12 @@ def train_model(
 						 	(Tanh(scale)|LeakyRelu(scale))>>\
 							concat_noisynormdrop_one>>\
 						 	(Elu(scale)|LeakyRelu())>>\
-							concat_normdrop_two>>\
+							concat_noisynormdrop_two>>\
 						 	(Elu(scale)|Tanh(scale))>>\
-							concat_normdrop_three >>\
+							concat_noisynormdrop_three >>\
 							Tanh(scale)>>\
 							(Tanh(scale) | Elu(scale))>>\
-							concat_normdrop_four>>\
+							concat_noisynormdrop_four>>\
 							HardSigmoid(1)
 
 
