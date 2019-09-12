@@ -146,12 +146,32 @@ def train_model(
 									   concat_normdrop_two >>(Tanh(scale)|Elu(scale))>>concat_normdrop_three>>\
 									   Tanh(scale) >> concat_normdrop_four >> Sigmoid(1)
 
+	# model 6 - hybrid noisy parallel sequential
+	concat_noisynormdrop_one = Concatenate() >> BatchNorm() >> Dropout(proba=.2) >> GaussianNoise(std=0.1)
+	concat_noisynormdrop_two = Concatenate() >> BatchNorm() >> Dropout(proba=.2) >> GaussianNoise(std=0.1)
+	concat_noisynormdrop_three = Concatenate() >> BatchNorm() >> Dropout(proba=.1) >> GaussianNoise(std=0.1)
+	concat_noisynormdrop_four = Concatenate() >> BatchNorm() >> Dropout(proba=.1) >> GaussianNoise(std=0.1)
+	noisy_para_seq = Input(scale)>>\
+							Linear(scale)>>\
+						 	(Tanh(scale)|LeakyRelu(scale))>>\
+							concat_noisynormdrop_one>>\
+						 	(Elu(scale)|LeakyRelu())>>\
+							concat_normdrop_two>>\
+						 	(Elu(scale)|Tanh(scale))>>\
+							concat_normdrop_three >>\
+							Tanh(scale)>>\
+							(Tanh(scale) | Elu(scale))>>\
+							concat_normdrop_four>>\
+							HardSigmoid(1)
+
+
 	net_select_dict = {
 		'sequential 1':sequential_net_one,
 		'par net relu':parralel_network_relu_out,
 		'par net sig':parralel_network_sig_out,
 		'funnel net':parralel_funnel_network_sig_out,
-		'scaling funnel net':autoscale_funnel_network_sig_out
+		'scaling funnel net':autoscale_funnel_network_sig_out,
+		'noisy parallel sequential':noisy_para_seq
 	}
 
 	network = net_select_dict[network_select]
