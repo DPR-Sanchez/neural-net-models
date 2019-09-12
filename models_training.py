@@ -153,14 +153,13 @@ def train_model(
 	concat_noisynormdrop_four = Concatenate() >> BatchNorm() >> Dropout(proba=.1) >> GaussianNoise(std=0.4)
 	noisy_para_seq = Input(input_size)>>\
 							Linear(scale)>>\
-						 	(Tanh(scale)|LeakyRelu(scale))>>\
+							(Tanh(scale)|Elu(scale)|LeakyRelu(scale)|Sigmoid(scale))>>\
 							concat_noisynormdrop_one>>\
-						 	(Elu(scale)|LeakyRelu())>>\
+							(Tanh(scale)|Elu(scale)|LeakyRelu(scale)|Sigmoid(scale))>>\
 							concat_noisynormdrop_two>>\
-						 	(Elu(scale)|Tanh(scale))>>\
+							(Tanh(scale)|Elu(scale)|LeakyRelu(scale)|Sigmoid(scale))>>\
 							concat_noisynormdrop_three >>\
-							Tanh(scale)>>\
-							(Tanh(scale) | Elu(scale))>>\
+							(Tanh(scale)|Elu(scale)|LeakyRelu(scale)|Sigmoid(scale))>>\
 							concat_noisynormdrop_four>>\
 							HardSigmoid(1)
 
