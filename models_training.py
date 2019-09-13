@@ -148,10 +148,10 @@ def train_model(
 									   Tanh(scale) >> concat_normdrop_four >> Sigmoid(1)
 
 	# model 6 - hybrid noisy parallel sequential
-	concat_noisynormdrop_one = Concatenate() >> BatchNorm() >> Dropout(proba=.1) >> GaussianNoise(std=0.3)
-	concat_noisynormdrop_two = Concatenate() >> BatchNorm() >> Dropout(proba=.1) >> GaussianNoise(std=0.3)
-	concat_noisynormdrop_three = Concatenate()>> BatchNorm() >> Dropout(proba=.1) >> GaussianNoise(std=0.3)
-	concat_noisynormdrop_four = Concatenate() >> BatchNorm() >> Dropout(proba=.1) >> GaussianNoise(std=0.3)
+	concat_noisynormdrop_one = Concatenate() >> BatchNorm() >> Dropout(proba=.1) >> GaussianNoise(std=0.2)
+	concat_noisynormdrop_two = Concatenate() >> BatchNorm() >> Dropout(proba=.1) >> GaussianNoise(std=0.2)
+	concat_noisynormdrop_three = Concatenate()>> BatchNorm() >> Dropout(proba=.1) >> GaussianNoise(std=0.2)
+	concat_noisynormdrop_four = Concatenate() >> BatchNorm() >> Dropout(proba=.1) >> GaussianNoise(std=0.2)
 	noisy_para_seq = Input(input_size)>>\
 							Linear(scale)>>\
 							(Tanh(scale)|Elu(scale)|LeakyRelu(scale)|Sigmoid(scale))>>\
