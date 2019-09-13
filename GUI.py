@@ -2,13 +2,14 @@ import CONSTANTS
 import models_training
 
 import asyncio
+import base64
 import datetime
 import dill
+import io
 import matplotlib.pyplot as plt
-import PySimpleGUI as sg
 import os
+import PySimpleGUI as sg
 import re
-import base64
 
 
 async def gui_layouts(layout):
@@ -226,8 +227,11 @@ async def events_loop(layouts_list):
 						# try:
 						# optimizer.plot_errors()
 						optimizer.plot_errors(show=False)
-						plt.savefig('training_history.png')
-						image_elem = sg.Image(filename='training_history.png')
+						bytes = io.BytesIO()
+						plt.savefig(bytes)
+						bytes.seek(0)
+						encoded = base64.b64encode(bytes.read())
+						image_elem = sg.Image(data=encoded)
 
 						display_training_layout = [
 							[image_elem],
