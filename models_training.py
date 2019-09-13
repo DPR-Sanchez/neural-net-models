@@ -119,10 +119,8 @@ def train_model(
 							   Concatenate() >> Tanh(30) >> Sigmoid(1)
 
 
-	scale = int(input_size/10 * (2/3))+1
+	scale = int(input_size * (3/4))+1
 
-	if scale > 6 :
-		scale = 6
 
 	parsig_two = Sigmoid(scale) >> BatchNorm() >> Dropout(proba=.4)>> Sigmoid(scale)
 	partan_two = Tanh(scale) >> BatchNorm() >> Dropout(proba=.4)>> Tanh(scale)
@@ -150,9 +148,9 @@ def train_model(
 									   Tanh(scale) >> concat_normdrop_four >> Sigmoid(1)
 
 	# model 6 - hybrid noisy parallel sequential
-	concat_noisynormdrop_one = Concatenate() >> BatchNorm() >> Dropout(proba=.4) >> GaussianNoise(std=0.3)
-	concat_noisynormdrop_two = Concatenate() >> BatchNorm() >> Dropout(proba=.3) >> GaussianNoise(std=0.3)
-	concat_noisynormdrop_three = Concatenate() >> BatchNorm() >> Dropout(proba=.2) >> GaussianNoise(std=0.3)
+	concat_noisynormdrop_one = Concatenate() >> BatchNorm() >> Dropout(proba=.1) >> GaussianNoise(std=0.3)
+	concat_noisynormdrop_two = Concatenate() >> BatchNorm() >> Dropout(proba=.1) >> GaussianNoise(std=0.3)
+	concat_noisynormdrop_three = Concatenate()>> BatchNorm() >> Dropout(proba=.1) >> GaussianNoise(std=0.3)
 	concat_noisynormdrop_four = Concatenate() >> BatchNorm() >> Dropout(proba=.1) >> GaussianNoise(std=0.3)
 	noisy_para_seq = Input(input_size)>>\
 							Linear(scale)>>\
