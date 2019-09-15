@@ -23,7 +23,7 @@ def fetch_data_source(data_source:str, index:bool,dataset=False,headers=False):
 		training_set = check_array(training_set[1:],force_all_finite=True)
 	else:
 		training_set = check_array(training_set,force_all_finite=True)
-	
+
 	# Split lines into examples and labels
 	examples = training_set[:, 1:-1] if index else training_set[:, :-1]
 	labels = training_set[:, -1:]
@@ -121,7 +121,7 @@ def train_model(
 							   Concatenate() >> Tanh(30) >> Sigmoid(1)
 
 
-	scale = int(input_size * (3/4))+1
+	scale = int(input_size * 1.5)+1
 
 
 	parsig_two = Sigmoid(scale) >> BatchNorm() >> Dropout(proba=.4)>> Sigmoid(scale)
@@ -150,10 +150,10 @@ def train_model(
 									   Tanh(scale) >> concat_normdrop_four >> Sigmoid(1)
 
 	# model 6 - hybrid noisy parallel sequential
-	concat_noisynormdrop_one = Concatenate() >> BatchNorm() >> Dropout(proba=.1) >> GaussianNoise(std=0.2)
-	concat_noisynormdrop_two = Concatenate() >> BatchNorm() >> Dropout(proba=.1) >> GaussianNoise(std=0.2)
-	concat_noisynormdrop_three = Concatenate()>> BatchNorm() >> Dropout(proba=.1) >> GaussianNoise(std=0.2)
-	concat_noisynormdrop_four = Concatenate() >> BatchNorm() >> Dropout(proba=.1) >> GaussianNoise(std=0.2)
+	concat_noisynormdrop_one = Concatenate() >> GaussianNoise(std=2) >> BatchNorm() >> Dropout(proba=.7)
+	concat_noisynormdrop_two = Concatenate() >> GaussianNoise(std=2) >> BatchNorm() >> Dropout(proba=.9)
+	concat_noisynormdrop_three = Concatenate()>> GaussianNoise(std=2) >> BatchNorm() >> Dropout(proba=.8)
+	concat_noisynormdrop_four = Concatenate() >> GaussianNoise(std=2) >> BatchNorm() >> Dropout(proba=.7)
 	noisy_para_seq = Input(input_size)>>\
 							Linear(scale)>>\
 							(Tanh(scale)|Elu(scale)|LeakyRelu(scale)|Sigmoid(scale))>>\
