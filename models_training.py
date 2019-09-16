@@ -186,7 +186,7 @@ def train_model(
 		network,
 		loss=loss_function,
 		verbose=False,
-		regularizer=algorithms.l2(0.001),
+		regularizer=algorithms.l2(0.00001),
 		shuffle_data=True
 	)
 
