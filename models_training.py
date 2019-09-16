@@ -168,7 +168,7 @@ def train_model(
 							concat_noisynormdrop_two >>\
 							(Tanh(scale)|Elu(scale)|LeakyRelu(scale)|Sigmoid(scale))>>\
 							concat_noisynormdrop_three>>\
-							HardSigmoid(1)
+							Sigmoid(1)
 
 
 	net_select_dict = {
