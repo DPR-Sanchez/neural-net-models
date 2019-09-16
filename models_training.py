@@ -164,7 +164,7 @@ def train_model(
 							Linear(scale)>>\
 							(Tanh(scale)|Elu(scale)|sub_tri_leaky_relu|sub_tri)>>\
 							concat_noisynormdrop_one>>\
-							(Tanh(fourth)>>Tanh(fourth)|Elu(fourth)>>Elu(fourth)|Sigmoid(fourth)>>Sigmoid(fourth))>>\
+							(Tanh(scale)>>Tanh(scale)|Elu(scale)>>Elu(scale)|Sigmoid(fourth)>>Sigmoid(fourth))>>\
 							concat_noisynormdrop_two >>\
 							(Tanh(scale)|Elu(scale)|LeakyRelu(scale)|Sigmoid(scale))>>\
 							concat_noisynormdrop_three>>\
