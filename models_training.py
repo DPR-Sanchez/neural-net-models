@@ -150,20 +150,24 @@ def train_model(
 									   Tanh(scale) >> concat_normdrop_four >> Sigmoid(1)
 
 	# model 6 - hybrid noisy parallel sequential
-	concat_noisynormdrop_one = Concatenate() >> GaussianNoise(std=2) >> BatchNorm() >> Dropout(proba=.7)
-	concat_noisynormdrop_two = Concatenate() >> GaussianNoise(std=2) >> BatchNorm() >> Dropout(proba=.9)
-	concat_noisynormdrop_three = Concatenate()>> GaussianNoise(std=2) >> BatchNorm() >> Dropout(proba=.8)
-	concat_noisynormdrop_four = Concatenate() >> GaussianNoise(std=2) >> BatchNorm() >> Dropout(proba=.7)
+	fourth = int(scale/4)
+	thirds = int(scale/3)
+
+	concat_noisynormdrop_one = Concatenate() >> GaussianNoise(std=1) >> BatchNorm() >> Dropout(proba=.1)
+	concat_noisynormdrop_two = Concatenate()>> GaussianNoise(std=1) >> BatchNorm() >> Dropout(proba=.1)
+	concat_noisynormdrop_three = Concatenate() >> GaussianNoise(std=1) >> BatchNorm() >> Dropout(proba=.1)
+
+	sub_tri = Elu(fourth) >> Sigmoid(fourth)
+	sub_tri_leaky_relu = LeakyRelu(thirds)>>LeakyRelu(thirds)>>LeakyRelu(thirds)
+
 	noisy_para_seq = Input(input_size)>>\
 							Linear(scale)>>\
-							(Tanh(scale)|Elu(scale)|LeakyRelu(scale)|HardSigmoid(scale))>>\
+							(Tanh(scale)|Elu(scale)|sub_tri_leaky_relu|sub_tri)>>\
 							concat_noisynormdrop_one>>\
-							(Tanh(scale)|Elu(scale)|LeakyRelu(scale)|HardSigmoid(scale))>>\
-							concat_noisynormdrop_two>>\
-							(Tanh(scale)|Elu(scale)|LeakyRelu(scale)|HardSigmoid(scale))>>\
-							concat_noisynormdrop_three >>\
-							(Tanh(scale)|Elu(scale)|LeakyRelu(scale)|HardSigmoid(scale))>>\
-							concat_noisynormdrop_four>>\
+							(Tanh(fourth)>>Tanh(fourth)|Elu(fourth)>>Elu(fourth)|Sigmoid(fourth)>>Sigmoid(fourth))>>\
+							concat_noisynormdrop_two >>\
+							(Tanh(scale)|Elu(scale)|LeakyRelu(scale)|Sigmoid(scale))>>\
+							concat_noisynormdrop_three>>\
 							HardSigmoid(1)
 
 
