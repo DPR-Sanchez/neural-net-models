@@ -153,7 +153,7 @@ def train_model(
 	fourth = int(scale/4)
 	thirds = int(scale/3)
 
-	concat_noisynormdrop_one = Concatenate() >> GaussianNoise(std=1) >> BatchNorm() >> Dropout(proba=.1)
+	concat_noisynormdrop_one = Concatenate() >> GaussianNoise(std=1) >> BatchNorm() >> Dropout(proba=.6)
 	concat_noisynormdrop_two = Concatenate()>> GaussianNoise(std=1) >> BatchNorm() >> Dropout(proba=.1)
 	concat_noisynormdrop_three = Concatenate() >> GaussianNoise(std=1) >> BatchNorm() >> Dropout(proba=.1)
 
