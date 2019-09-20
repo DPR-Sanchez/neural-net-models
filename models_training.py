@@ -153,9 +153,9 @@ def train_model(
 	fourth = int(scale/4)
 	thirds = int(scale/3)
 
-	concat_noisynormdrop_one = Concatenate() >> (GaussianNoise(std=1) >> BatchNorm() >> Dropout(proba=.7)) | ( Identity()>> Dropout(proba=.7))>> Concatenate()
-	concat_noisynormdrop_two = Concatenate()>> (GaussianNoise(std=1) >> BatchNorm() >> Dropout(proba=.7)) | ( Identity()>> Dropout(proba=.7))>> Concatenate()
-	concat_noisynormdrop_three = Concatenate() >> (GaussianNoise(std=1) >> BatchNorm() >> Dropout(proba=.7)) | ( Identity()>> Dropout(proba=.7))>> Concatenate()
+	concat_noisynormdrop_one = Concatenate() >> ((GaussianNoise(std=1) >> BatchNorm() >> Dropout(proba=.7)) | ( Identity()>> Dropout(proba=.7)))>> Concatenate()
+	concat_noisynormdrop_two = Concatenate()>> ((GaussianNoise(std=1) >> BatchNorm() >> Dropout(proba=.7)) | ( Identity()>> Dropout(proba=.7)))>> Concatenate()
+	concat_noisynormdrop_three = Concatenate() >> ((GaussianNoise(std=1) >> BatchNorm() >> Dropout(proba=.7)) | ( Identity()>> Dropout(proba=.7)))>> Concatenate()
 
 	sub_tri = (Elu(fourth)|Tanh(fourth)) >> Concatenate() >> Dropout(proba=.3)>> Sigmoid(fourth)
 	sub_tri_leaky_relu = (LeakyRelu(fourth)|Tanh(fourth))>>Concatenate()>>LeakyRelu(fourth)>>LeakyRelu(fourth)
