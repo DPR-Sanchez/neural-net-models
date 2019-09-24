@@ -3,6 +3,7 @@ import csv
 
 from neupy.layers import *
 from neupy import algorithms
+from sklearn.impute import SimpleImputer
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 from sklearn.utils import check_array
@@ -14,15 +15,15 @@ import tensorflow as tf
 
 def fetch_data_source(data_source:str, index:bool,dataset=False,headers=False):
 	# data_source should be the string path to data csv
-
-	training_set = pd.read_csv(data_source).to_numpy()
-
-
 	#remove headers if present
 	if headers:
-		training_set = check_array(training_set[1:],force_all_finite=True)
+		training_set = pd.read_csv(data_source).to_numpy()[1:]
 	else:
-		training_set = check_array(training_set,force_all_finite=True)
+		training_set = pd.read_csv(data_source).to_numpy()
+
+	imp = SimpleImputer(missing_values=np.nan, strategy='mean')
+	#multiple layers of nan & inf filters for data source because some where getting through and causing errors downstream in the code
+	training_set = check_array(np.nan_to_num(imp.transform(training_set.fillna(training_set))),force_all_finite=True)
 
 	# Split lines into examples and labels
 	examples = training_set[:, 1:-1] if index else training_set[:, :-1]
