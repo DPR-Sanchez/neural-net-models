@@ -23,7 +23,7 @@ def fetch_data_source(data_source:str, index:bool,dataset=False,headers=False):
 
 	imp = SimpleImputer(missing_values=np.nan, strategy='mean')
 	#multiple layers of nan & inf filters for data source because some where getting through and causing errors downstream in the code
-	training_set = check_array(np.nan_to_num(imp.transform(training_set.fillna(training_set))),force_all_finite=True)
+	training_set = check_array(np.nan_to_num(imp.transform(training_set)),force_all_finite=True)
 
 	# Split lines into examples and labels
 	examples = training_set[:, 1:-1] if index else training_set[:, :-1]
