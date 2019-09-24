@@ -22,6 +22,7 @@ def fetch_data_source(data_source:str, index:bool,dataset=False,headers=False):
 		training_set = pd.read_csv(data_source).to_numpy()
 
 	imp = SimpleImputer(missing_values=np.nan, strategy='mean')
+	imp.fit(training_set)
 	#multiple layers of nan & inf filters for data source because some where getting through and causing errors downstream in the code
 	training_set = check_array(np.nan_to_num(imp.transform(training_set)),force_all_finite=True)
 
