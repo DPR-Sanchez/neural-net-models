@@ -96,15 +96,13 @@ def train_model(
 	training_examples, validation_examples, training_labels, validation_labels = train_test_split(examples, labels, test_size=0.4)
 
 	# model 1
-	sequential_net_one = join(
-		Input(input_size),
-		Linear(30),
-		Sigmoid(30),
-		Relu(30),
-		Tanh(30),
-		Tanh(30),
-		Relu(1)
-	)
+	sub_model_1 = Linear(30)>>\
+		Sigmoid(30)>>\
+		Relu(30)>>\
+		Tanh(30)>>\
+		Tanh(30)
+
+	sequential_net_one = Input(input_size) >> sub_model_1>> Relu(1)
 
 	parsig = Sigmoid(30) >> Sigmoid(30)
 	partan = Tanh(30) >> Tanh(30)
@@ -113,14 +111,18 @@ def train_model(
 	parchain_zero = Sigmoid(30) >> Relu(30)
 
 	# model 2 - binary classifier
-	parralel_network_relu_out = Input(input_size) >> Linear(30) >> (
-				parsig | partan | parelu | parchain_negative | parchain_zero) >> \
-								Concatenate() >> Tanh(30) >> Relu(1)
+	sub_model_2 = Linear(30) >>\
+					(parsig | partan | parelu | parchain_negative | parchain_zero) >> \
+					Concatenate() >> Tanh(30)
+
+	parralel_network_relu_out = Input(input_size) >> sub_model_2 >> Relu(1)
 
 	# model 3
-	parralel_network_sig_out = Input(input_size) >> Linear(30) >> (
-				parsig | partan | parelu | parchain_negative | parchain_zero) >> \
-							   Concatenate() >> Tanh(30) >> Sigmoid(1)
+	sub_model_3 = Linear(30) >>\
+					(parsig | partan | parelu | parchain_negative | parchain_zero) >> \
+					Concatenate() >> Tanh(30)
+
+	parralel_network_sig_out = Input(input_size) >> sub_model_3 >> Sigmoid(1)
 
 
 	scale = int(input_size * 1.5)+1
@@ -133,23 +135,24 @@ def train_model(
 	parchain_zero_two = Sigmoid(scale) >> BatchNorm() >> Dropout(proba=.4)>> Relu(scale)
 
 	# model 4 - partially scales with input
-	parralel_funnel_network_sig_out = Input(input_size) >> Linear(30) >> \
-									   ((parsig | partan | parelu | parchain_negative | parchain_zero)\
-									   |(parsig_two | partan_two | parelu_two)) >> Concatenate() >> \
-									   (parchain_negative_two | parchain_zero_two) >> \
-									   Concatenate() >> Tanh(30) >> Sigmoid(1)
+	sub_model_4 = Linear(30) >> \
+					(parsig | partan | parelu | parchain_negative | parchain_zero|parsig_two | partan_two | parelu_two) >>\
+					Concatenate() >> (parchain_negative_two | parchain_zero_two) >> Concatenate() >> Tanh(30)
+
+	parralel_funnel_network_sig_out = Input(input_size)>> sub_model_4  >> Sigmoid(1)
 
 	#model 5 - size scales with input
 	concat_normdrop_one = Concatenate()>>BatchNorm()>>Dropout(proba=.3)
 	concat_normdrop_two = Concatenate() >> BatchNorm() >> Dropout(proba=.2)
 	concat_normdrop_three = Concatenate() >> BatchNorm() >> Dropout(proba=.2)
 	concat_normdrop_four = Concatenate() >> BatchNorm() >> Dropout(proba=.1)
-	autoscale_funnel_network_sig_out = Input(input_size) >> Linear(scale) >> \
-									   ((parsig | partan | parelu | parchain_negative | parchain_zero) \
-										| (parsig_two | partan_two | parelu_two)) >> concat_normdrop_one >> \
-									   (parchain_negative_two | parchain_zero_two) >> \
-									   concat_normdrop_two >>(Tanh(scale)|Elu(scale))>>concat_normdrop_three>>\
-									   Tanh(scale) >> concat_normdrop_four >> Sigmoid(1)
+	sub_model_5 = Linear(scale) >> \
+					(parsig | partan | parelu | parchain_negative | parchain_zero | parsig_two | partan_two | parelu_two)>>\
+				  	concat_normdrop_one >> 	(parchain_negative_two | parchain_zero_two) >> \
+					concat_normdrop_two >>(Tanh(scale)|Elu(scale))>>concat_normdrop_three>>\
+					Tanh(scale) >> concat_normdrop_four
+
+	autoscale_funnel_network_sig_out = Input(input_size) >> sub_model_5 >> Sigmoid(1)
 
 	# model 6 - hybrid noisy parallel sequential
 	fourth = int(scale/4)
@@ -162,15 +165,20 @@ def train_model(
 	sub_tri = (Elu(fourth)|Tanh(fourth)) >> Concatenate() >> Dropout(proba=.3)>> Sigmoid(fourth)
 	sub_tri_leaky_relu = (LeakyRelu(fourth)|Tanh(fourth))>>Concatenate()>>LeakyRelu(fourth)>>LeakyRelu(fourth)
 
-	noisy_para_seq = Input(input_size)>>\
-							Linear(thirds)>>\
-							(Tanh(fourth)|Elu(fourth)|LeakyRelu(fourth)|sub_tri_leaky_relu|sub_tri)>>\
-							concat_noisynormdrop_one>>\
-							(Tanh(fourth)>>Tanh(fourth)|Elu(fourth)>>Elu(fourth)|Sigmoid(fourth)>>Sigmoid(fourth))>>\
-							concat_noisynormdrop_two >>\
-							(Tanh(fourth)|Elu(fourth)|LeakyRelu(fourth)|Sigmoid(fourth))>>\
-							concat_noisynormdrop_three>>\
-							Sigmoid(1)
+	sub_model_6 = 	Linear(thirds)>>\
+						(Tanh(fourth)|Elu(fourth)|LeakyRelu(fourth)|sub_tri_leaky_relu|sub_tri)>>\
+						concat_noisynormdrop_one>>\
+						(Tanh(fourth)>>Tanh(fourth)|Elu(fourth)>>Elu(fourth)|Sigmoid(fourth)>>Sigmoid(fourth))>>\
+						concat_noisynormdrop_two >>\
+						(Tanh(fourth)|Elu(fourth)|LeakyRelu(fourth)|Sigmoid(fourth))>>\
+						concat_noisynormdrop_three
+
+	noisy_para_seq = Input(input_size)>> sub_model_6  >> Sigmoid(1)
+
+	#model 7  - model 1-6 mixture of models
+	models_mixture = Input(input_size)>>\
+					 (sub_model_1|sub_model_2|sub_model_3|sub_model_4|sub_model_5|sub_model_6) >>\
+					 Concatenate() >> Sigmoid(1)
 
 
 	net_select_dict = {
@@ -179,7 +187,8 @@ def train_model(
 		'par net sig':parralel_network_sig_out,
 		'funnel net':parralel_funnel_network_sig_out,
 		'scaling funnel net':autoscale_funnel_network_sig_out,
-		'noisy parallel sequential':noisy_para_seq
+		'noisy parallel sequential':noisy_para_seq,
+		'models_mixture':models_mixture
 	}
 
 	network = net_select_dict[network_select]
