@@ -3,6 +3,7 @@ import csv
 
 from neupy.layers import *
 from neupy import algorithms
+from neupy import architectures
 from sklearn.impute import SimpleImputer
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
@@ -102,7 +103,7 @@ def train_model(
 
 
 
-	# model 2 
+	# model 2
 	mod2_parsig = Sigmoid(30) >> Sigmoid(30)
 	mod2_partan = Tanh(30) >> Tanh(30)
 	mod2_parelu = Elu(30) >> Elu(30)
@@ -194,9 +195,7 @@ def train_model(
 	noisy_para_seq = Input(input_size)>> sub_model_6
 
 	#model 7  - model 1-6 mixture of models
-	models_mixture = Input(input_size)>>\
-					(sub_model_1|sub_model_2|sub_model_3|sub_model_4|sub_model_5|sub_model_6) >>\
-					Concatenate() >> Sigmoid(1)
+	models_mixture = architectures.mixture_of_experts([sequential_net_one,parralel_network_sig_out,parralel_funnel_network_sig_out,autoscale_funnel_network_sig_out,noisy_para_seq])
 
 
 	net_select_dict = {
