@@ -45,11 +45,6 @@ def prediction(network, samples=[], labels=[], mode='', data_source='', index=Fa
 		if data_source != '':
 			samples, labels = fetch_data_source(data_source, index, headers=headers)
 
-		prediction = network.predict(samples)
-
-		#Using max min average as a rough translation to binary 1 0 for any activation function used as the output node
-		prediction_average = (prediction.max()+prediction.min())/2
-
 		prediction = [1 if i > .5 else 0 for i in network.predict(samples)]
 		accuracy = [1 if prediction[i] == labels[i] else 0 for i in range(len(prediction))].count(1) / len(
 			prediction)
