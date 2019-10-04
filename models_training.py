@@ -1,5 +1,6 @@
 from random import seed
 import csv
+import math
 
 from neupy.layers import *
 from neupy import algorithms
@@ -48,9 +49,9 @@ def prediction(network, samples=[], labels=[], mode='', data_source='', index=Fa
 		prediction = [1 if i > .5 else 0 for i in network.predict(samples)]
 		accuracy = [1 if prediction[i] == labels[i] else 0 for i in range(len(prediction))].count(1) / len(
 			prediction)
-		min_bound = prediction.count(0)* accuracy
-		max_bound = prediction.count(0)*(2-accuracy)
-		return f'{accuracy * 100:.2f}%',f'{min_bound:.2f}/{max_bound:.2f}'
+		min_bound = int(math.floor(prediction.count(0)* accuracy))
+		max_bound = int(math.ceil(prediction.count(0)*(2-accuracy)))
+		return f'{accuracy * 100:.2f}%',f'{min_bound}/{max_bound}'
 
 	else:
 		dataset, samples = fetch_data_source(data_source,index,dataset=True,headers=headers)
