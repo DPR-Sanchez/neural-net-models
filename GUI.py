@@ -32,7 +32,7 @@ async def gui_layouts(layout):
 			[sg.InputCombo(COST_FUNCTION_NAMES, size=(20, 3)),sg.InputCombo(NETWORK_MODELS, size=(20, 3)), sg.Input(default_text='100', size=(20, 3))],
 			[sg.Text('numpy seed:'), sg.T(' ' * 12), sg.Text('tensorflow  seed:'), sg.T(' ' * 8),sg.Text('rand seed:')],
 			[sg.Input(default_text='614', size=(20, 3)),sg.Input(default_text='1234', size=(20, 3)), sg.Input(default_text='2', size=(20, 3))],
-			[sg.Text('training accuracy: ', size=(41, 2), key='accuracy'), sg.Text('training dataset: ', size=(30, 1),key='training dataset')],
+			[sg.Text('training accuracy: ', size=(20, 2), key='accuracy'), sg.Text('training dataset: ', size=(30, 1),key='training dataset')],
 
 			[sg.Text('_' * 80)],
 			[sg.Text('Choose your desired dataset that you would like to predict or train on', size=(60, 1))],
@@ -267,7 +267,6 @@ async def events_loop(layouts_list):
 
 							file_name = values[6].split('/')[-1]
 							general_training_window.Element('training dataset').Update(f'training dataset: {file_name}')
-
 							general_training_window.Refresh()
 						else:
 							sg.Popup("Please either load or train a Neural Network")
