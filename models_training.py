@@ -1,4 +1,5 @@
 from random import seed
+import collections
 import csv
 import math
 
@@ -27,6 +28,27 @@ def fetch_data_source(data_source:str, index:bool,dataset=False,headers=False):
 	imp.fit(training_set)
 	#multiple layers of nan & inf filters for data source because some where getting through and causing errors downstream in the code
 	training_set = check_array(np.nan_to_num(imp.transform(training_set)),force_all_finite=True)
+
+	last_column_index = len(training_set[0]-1)
+	last_column = training_set[:,last_column_index]
+	set_total = len(last_column)
+	occurrence = collections.Counter(last_column)
+
+	min_occurrent = min(occurrence)
+	sample_size = min_occurrent[1]
+	min_occurrent = min_occurrent[0]
+
+	max_occurrent = max(occurrence)[0]
+
+	# select all instances of the binary label that occurs the least
+	min_label_array= training_set[training_set[:, last_column_index] == min_occurrent ]
+
+	# select sample_size number of instances of the binary label that occurs the most
+	max_label_array = training_set[training_set[:, last_column_index] == max_occurrent]
+	row_i = np.random.choice(max_label_array.shape[0], sample_size)
+	max_label_array = max_label_array[row_i, :]
+
+	training_set = np.random.shuffle(np.concatenate((min_label_array, max_label_array), axis=0))
 
 	# Split lines into examples and labels
 	examples = training_set[:, 1:-1] if index else training_set[:, :-1]
