@@ -259,7 +259,7 @@ async def events_loop(layouts_list):
 				elif event == 'Aux. Test':
 					if values[6] != 'Select dataset >>' and values[6][-3:] == 'csv':
 						if trained_net is not None:
-							accuracy,actual,predicted,delta,diff,bounds = models_training.prediction(
+							accuracy,actual,predicted,delta,miss,bounds = models_training.prediction(
 																	trained_net,
 																	mode='accuracy',
 																	data_source=values[6],
@@ -271,7 +271,7 @@ async def events_loop(layouts_list):
 																					f'0/1 actual: {actual} \n' \
 																					f'0/1 prediction: {predicted} \n' \
 																					f'0/1 delta: {delta} \n' \
-																					f'0/1 diff: {diff} \n' \
+																					f'0/1 miss: {miss} \n' \
 																			   		f'negative min/max range: {bounds}'
 																				)
 
