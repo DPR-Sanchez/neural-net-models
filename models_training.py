@@ -79,8 +79,9 @@ def prediction(network, samples=[], labels=[], mode='', data_source='', index=Fa
 		accuracy = comparison.count(1) / len(	prediction)
 		predicted_zeros = prediction.count(0)
 		predicted_ones = prediction.count(1)
-		zero_actual = labels.count(0)
-		one_actual = labels.count(1)
+		count_actual = collections.Counter(labels)
+		zero_actual = count_actual[0]
+		one_actual = count_actual[1]
 		min_bound = int(math.floor(prediction.count(0)* accuracy))
 		max_bound = int(math.ceil(prediction.count(0)*(2-accuracy)))
 		return f'{accuracy * 100:.2f}%',f'{zero_actual}/{one_actual}',f'{predicted_zeros}/{predicted_ones}',f'{min_bound}/{max_bound}'
