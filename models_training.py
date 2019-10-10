@@ -69,7 +69,7 @@ def prediction(network, samples=[], labels=[], mode='', data_source='', index=Fa
 
 	if mode == 'accuracy':
 		if data_source != '':
-			samples, labels = fetch_data_source(data_source, index, headers=headers, training=training)
+			samples, labels = fetch_data_source(data_source, index, headers=headers)
 
 		prediction = [1 if i > .5 else 0 for i in network.predict(samples)]
 		accuracy = [1 if prediction[i] == labels[i] else 0 for i in range(len(prediction))].count(1) / len(
@@ -79,7 +79,7 @@ def prediction(network, samples=[], labels=[], mode='', data_source='', index=Fa
 		return f'{accuracy * 100:.2f}%',f'{min_bound}/{max_bound}'
 
 	else:
-		dataset, samples = fetch_data_source(data_source,index,dataset=True,headers=headers)
+		dataset, samples = fetch_data_source(data_source,index,dataset=True,headers=headers, training=training)
 		opt_results = network.predict(samples)
 		output = np.append(dataset, opt_results, axis=1)
 
@@ -105,7 +105,7 @@ def train_model(
 					index=True,
 					headers = False
 				):
-	examples, labels = fetch_data_source(data_source, index,headers=headers)
+	examples, labels = fetch_data_source(data_source, index,headers=headers,training=True)
 	np.random.seed(numpy_seed)
 	seed(ran_seed)
 	session_conf = tf.ConfigProto(intra_op_parallelism_threads=1, 	inter_op_parallelism_threads=1)
@@ -242,7 +242,7 @@ def train_model(
 	)
 
 	optimizer.train(training_examples, training_labels, validation_examples, validation_labels, batch_size=256, epochs=epochs_count)
-	accuracy = prediction(optimizer,validation_examples,validation_labels,'accuracy',training=True)
+	accuracy = prediction(optimizer,validation_examples,validation_labels,'accuracy')
 
 
 
