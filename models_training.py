@@ -86,14 +86,12 @@ def prediction(network, samples=[], labels=[], mode='', data_source='', index=Fa
 		one_actual = count_actual[1]
 		zero_delta = predicted_zeros - zero_actual
 		one_delta = predicted_ones - one_actual
-		zero_diff = zero_miss - zero_actual
-		one_diff = one_miss - one_actual
 		min_bound = int(math.floor(prediction.count(0)* accuracy))
 		max_bound = int(math.ceil(prediction.count(0)*(2-accuracy)))
 		return f'{accuracy * 100:.2f}%',f'{zero_actual}/{one_actual}',\
 			   f'{predicted_zeros}/{predicted_ones}',\
 			   f'{zero_delta}/{one_delta}', \
-			   f'{zero_diff}/{one_diff}', \
+			   f'{zero_miss}/{one_miss}', \
 			   f'{min_bound}/{max_bound}'
 
 	else:
