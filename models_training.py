@@ -17,7 +17,7 @@ import pandas as pd
 import tensorflow as tf
 
 
-def fetch_data_source(data_source:str, index:bool,dataset=False,headers=False):
+def fetch_data_source(data_source:str, index:bool,dataset=False,headers=False,training=False):
 	# data_source should be the string path to data csv
 	#remove headers if present
 	if headers:
@@ -30,26 +30,28 @@ def fetch_data_source(data_source:str, index:bool,dataset=False,headers=False):
 	#multiple layers of nan & inf filters for data source because some where getting through and causing errors downstream in the code
 	training_set = check_array(np.nan_to_num(imp.transform(training_set)),force_all_finite=True)
 
-	last_column_index = len(training_set[0])-1
-	last_column = training_set[:,last_column_index]
-	set_total = len(last_column)
-	occurrence = collections.Counter(last_column)
+	if training:
+		last_column_index = len(training_set[0])-1
+		last_column = training_set[:,last_column_index]
+		set_total = len(last_column)
+		occurrence = collections.Counter(last_column)
 
-	min_occurrent = min(occurrence.items(),key=operator.itemgetter(1))
-	sample_size = min_occurrent[1]
-	min_occurrent = min_occurrent[0]
+		min_occurrent = min(occurrence.items(),key=operator.itemgetter(1))
+		sample_size = min_occurrent[1]
+		min_occurrent = min_occurrent[0]
 
-	max_occurrent = max(occurrence.items(),key=operator.itemgetter(1))[0]
+		max_occurrent = max(occurrence.items(),key=operator.itemgetter(1))[0]
 
-	# select all instances of the binary label that occurs the least
-	min_label_array= training_set[training_set[:, last_column_index] == min_occurrent ]
+		# select all instances of the binary label that occurs the least
+		min_label_array= training_set[training_set[:, last_column_index] == min_occurrent ]
 
-	# select sample_size number of instances of the binary label that occurs the most
-	max_label_array = training_set[training_set[:, last_column_index] == max_occurrent]
-	row_i = np.random.choice(max_label_array.shape[0], sample_size)
-	max_label_array = max_label_array[row_i, :]
+		# select sample_size number of instances of the binary label that occurs the most
+		max_label_array = training_set[training_set[:, last_column_index] == max_occurrent]
+		row_i = np.random.choice(max_label_array.shape[0], sample_size)
+		max_label_array = max_label_array[row_i, :]
 
-	training_set = np.random.shuffle(np.concatenate((min_label_array, max_label_array), axis=0))
+		training_set = np.concatenate((min_label_array, max_label_array), axis=0)
+		np.random.shuffle(training_set)
 
 	# Split lines into examples and labels
 	examples = training_set[:, 1:-1] if index else training_set[:, :-1]
@@ -63,11 +65,11 @@ def fetch_data_source(data_source:str, index:bool,dataset=False,headers=False):
 		return examples,labels
 
 
-def prediction(network, samples=[], labels=[], mode='', data_source='', index=False, save_location='', headers=False):
+def prediction(network, samples=[], labels=[], mode='', data_source='', index=False, save_location='', headers=False, training=False):
 
 	if mode == 'accuracy':
 		if data_source != '':
-			samples, labels = fetch_data_source(data_source, index, headers=headers)
+			samples, labels = fetch_data_source(data_source, index, headers=headers, training=training)
 
 		prediction = [1 if i > .5 else 0 for i in network.predict(samples)]
 		accuracy = [1 if prediction[i] == labels[i] else 0 for i in range(len(prediction))].count(1) / len(
@@ -240,7 +242,7 @@ def train_model(
 	)
 
 	optimizer.train(training_examples, training_labels, validation_examples, validation_labels, batch_size=256, epochs=epochs_count)
-	accuracy = prediction(optimizer,validation_examples,validation_labels,'accuracy')
+	accuracy = prediction(optimizer,validation_examples,validation_labels,'accuracy',training=True)
 
 
 
