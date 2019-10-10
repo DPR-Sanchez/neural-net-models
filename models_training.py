@@ -82,9 +82,11 @@ def prediction(network, samples=[], labels=[], mode='', data_source='', index=Fa
 		count_actual = collections.Counter(labels[:,len(labels[0])-1])
 		zero_actual = count_actual[0]
 		one_actual = count_actual[1]
+		zero_delta = predicted_zeros - zero_actual
+		one_delta = predicted_ones - one_actual
 		min_bound = int(math.floor(prediction.count(0)* accuracy))
 		max_bound = int(math.ceil(prediction.count(0)*(2-accuracy)))
-		return f'{accuracy * 100:.2f}%',f'{zero_actual}/{one_actual}',f'{predicted_zeros}/{predicted_ones}',f'{min_bound}/{max_bound}'
+		return f'{accuracy * 100:.2f}%',f'{zero_actual}/{one_actual}',f'{predicted_zeros}/{predicted_ones}',f'{zero_delta}/{one_delta}',f'{min_bound}/{max_bound}'
 
 	else:
 		dataset, samples = fetch_data_source(data_source,index,dataset=True,headers=headers, training=training)
