@@ -2,6 +2,7 @@ from random import seed
 import collections
 import csv
 import math
+import operator
 
 from neupy.layers import *
 from neupy import algorithms
@@ -29,16 +30,16 @@ def fetch_data_source(data_source:str, index:bool,dataset=False,headers=False):
 	#multiple layers of nan & inf filters for data source because some where getting through and causing errors downstream in the code
 	training_set = check_array(np.nan_to_num(imp.transform(training_set)),force_all_finite=True)
 
-	last_column_index = len(training_set[0]-1)
+	last_column_index = len(training_set[0])-1
 	last_column = training_set[:,last_column_index]
 	set_total = len(last_column)
 	occurrence = collections.Counter(last_column)
 
-	min_occurrent = min(occurrence)
+	min_occurrent = min(occurrence.items(),key=operator.itemgetter(1))
 	sample_size = min_occurrent[1]
 	min_occurrent = min_occurrent[0]
 
-	max_occurrent = max(occurrence)[0]
+	max_occurrent = max(occurrence.items(),key=operator.itemgetter(1))[0]
 
 	# select all instances of the binary label that occurs the least
 	min_label_array= training_set[training_set[:, last_column_index] == min_occurrent ]
