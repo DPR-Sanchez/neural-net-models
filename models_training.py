@@ -121,9 +121,11 @@ def train_model(
 					index=True,
 					headers = False
 				):
-	examples, labels = fetch_data_source(data_source, index,headers=headers,training=True)
 	np.random.seed(numpy_seed)
 	seed(ran_seed)
+
+	examples, labels = fetch_data_source(data_source, index,headers=headers,training=True)
+
 	session_conf = tf.ConfigProto(intra_op_parallelism_threads=1, 	inter_op_parallelism_threads=1)
 	tf.set_random_seed(tensor_seed)
 	sess = tf.Session(graph=tf.get_default_graph(), config=session_conf)
