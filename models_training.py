@@ -72,11 +72,18 @@ def prediction(network, samples=[], labels=[], mode='', data_source='', index=Fa
 			samples, labels = fetch_data_source(data_source, index, headers=headers)
 
 		prediction = [1 if i > .5 else 0 for i in network.predict(samples)]
-		accuracy = [1 if prediction[i] == labels[i] else 0 for i in range(len(prediction))].count(1) / len(
-			prediction)
+
+		#1 if prediction matches label
+		comparison = [1 if prediction[i] == labels[i] else 0 for i in range(len(prediction))]
+
+		accuracy = comparison.count(1) / len(	prediction)
+		predicted_zeros = prediction.count(0)
+		predicted_ones = prediction.count(1)
+		zero_actual = labels.count(0)
+		one_actual = labels.count(1)
 		min_bound = int(math.floor(prediction.count(0)* accuracy))
 		max_bound = int(math.ceil(prediction.count(0)*(2-accuracy)))
-		return f'{accuracy * 100:.2f}%',f'{min_bound}/{max_bound}'
+		return f'{accuracy * 100:.2f}%',f'{zero_actual}/{one_actual}',f'{predicted_zeros}/{predicted_ones}',f'{min_bound}/{max_bound}'
 
 	else:
 		dataset, samples = fetch_data_source(data_source,index,dataset=True,headers=headers, training=training)

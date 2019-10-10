@@ -32,7 +32,7 @@ async def gui_layouts(layout):
 			[sg.InputCombo(COST_FUNCTION_NAMES, size=(20, 3)),sg.InputCombo(NETWORK_MODELS, size=(20, 3)), sg.Input(default_text='100', size=(20, 3))],
 			[sg.Text('numpy seed:'), sg.T(' ' * 12), sg.Text('tensorflow  seed:'), sg.T(' ' * 8),sg.Text('rand seed:')],
 			[sg.Input(default_text='614', size=(20, 3)),sg.Input(default_text='1234', size=(20, 3)), sg.Input(default_text='2', size=(20, 3))],
-			[sg.Text('training accuracy: ', size=(30, 2), key='accuracy'), sg.Text('training dataset: ', size=(30, 1),key='training dataset')],
+			[sg.Text('training accuracy: ', size=(30, 4), key='accuracy'), sg.Text('training dataset: ', size=(30, 1),key='training dataset')],
 
 			[sg.Text('_' * 80)],
 			[sg.Text('Choose your desired dataset that you would like to predict or train on', size=(60, 1))],
@@ -191,10 +191,16 @@ async def events_loop(layouts_list):
 							neur_constants = CONSTANTS.NEUR_CONSTANTS()
 
 							selected_loss_function = neur_constants.get_constants_tuple()[2][values[0]]
-							optimizer,trained_net,accuracy = models_training.train_model(numpy_seed=values[2], tensor_seed=values[3],
-																				ran_seed=values[4], data_source=values[6],
-																				network_select=values[1], loss_function=selected_loss_function,
-																				epochs_count=values[2], index=values[7],headers=values[8]
+							optimizer,trained_net,accuracy = models_training.train_model(
+																							numpy_seed=values[2],
+																							tensor_seed=values[3],
+																							ran_seed=values[4],
+																							data_source=values[6],
+																							network_select=values[1],
+																							loss_function=selected_loss_function,
+																							epochs_count=values[2],
+																							index=values[7],
+																							headers=values[8]
 																				)
 							general_training_window.Element('accuracy').Update(f'training accuracy: {accuracy[0]}')
 
@@ -253,7 +259,7 @@ async def events_loop(layouts_list):
 				elif event == 'Aux. Test':
 					if values[6] != 'Select dataset >>' and values[6][-3:] == 'csv':
 						if trained_net is not None:
-							accuracy,bounds = models_training.prediction(
+							accuracy,actual,predicted,bounds = models_training.prediction(
 																	trained_net,
 																	mode='accuracy',
 																	data_source=values[6],
@@ -262,6 +268,8 @@ async def events_loop(layouts_list):
 																)
 							general_training_window.Element('accuracy').Update(
 																					f'training accuracy: {accuracy} \n' \
+																					f'0/1 actual: {actual} \n' \
+																					f'0/1 prediction: {predicted} \n' \
 																			   		f'negative min/max range: {bounds}'
 																				)
 
