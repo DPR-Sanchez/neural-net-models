@@ -75,8 +75,8 @@ def prediction(network, samples=[], labels=[], mode='', data_source='', index=Fa
 
 		#1 if prediction matches label
 		comparison = [1 if prediction[i] == labels[i] else 0 for i in range(len(prediction))]
-		zero_miss = len(1 for i in range(len(prediction)) if prediction[i] == 0 and prediction[i] != labels[i])
-		one_miss = len(1 for i in range(len(prediction)) if prediction[i] == 1 and prediction[i] != labels[i])
+		zero_miss = len([1 for i in range(len(prediction)) if prediction[i] == 0 and prediction[i] != labels[i]])
+		one_miss = len([1 for i in range(len(prediction)) if prediction[i] == 1 and prediction[i] != labels[i]])
 
 		accuracy = comparison.count(1) / len(	prediction)
 		predicted_zeros = prediction.count(0)
