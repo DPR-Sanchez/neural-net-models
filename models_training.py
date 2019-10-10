@@ -75,6 +75,8 @@ def prediction(network, samples=[], labels=[], mode='', data_source='', index=Fa
 
 		#1 if prediction matches label
 		comparison = [1 if prediction[i] == labels[i] else 0 for i in range(len(prediction))]
+		zero_miss = len(1 for i in range(len(prediction)) if prediction[i] == 0 and prediction[i] != labels[i])
+		one_miss = len(1 for i in range(len(prediction)) if prediction[i] == 1 and prediction[i] != labels[i])
 
 		accuracy = comparison.count(1) / len(	prediction)
 		predicted_zeros = prediction.count(0)
@@ -84,9 +86,15 @@ def prediction(network, samples=[], labels=[], mode='', data_source='', index=Fa
 		one_actual = count_actual[1]
 		zero_delta = predicted_zeros - zero_actual
 		one_delta = predicted_ones - one_actual
+		zero_diff = zero_miss - zero_actual
+		one_diff = one_miss - one_actual
 		min_bound = int(math.floor(prediction.count(0)* accuracy))
 		max_bound = int(math.ceil(prediction.count(0)*(2-accuracy)))
-		return f'{accuracy * 100:.2f}%',f'{zero_actual}/{one_actual}',f'{predicted_zeros}/{predicted_ones}',f'{zero_delta}/{one_delta}',f'{min_bound}/{max_bound}'
+		return f'{accuracy * 100:.2f}%',f'{zero_actual}/{one_actual}',\
+			   f'{predicted_zeros}/{predicted_ones}',\
+			   f'{zero_delta}/{one_delta}', \
+			   f'{zero_diff}/{one_diff}', \
+			   f'{min_bound}/{max_bound}'
 
 	else:
 		dataset, samples = fetch_data_source(data_source,index,dataset=True,headers=headers, training=training)

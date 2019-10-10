@@ -32,7 +32,7 @@ async def gui_layouts(layout):
 			[sg.InputCombo(COST_FUNCTION_NAMES, size=(20, 3)),sg.InputCombo(NETWORK_MODELS, size=(20, 3)), sg.Input(default_text='100', size=(20, 3))],
 			[sg.Text('numpy seed:'), sg.T(' ' * 12), sg.Text('tensorflow  seed:'), sg.T(' ' * 8),sg.Text('rand seed:')],
 			[sg.Input(default_text='614', size=(20, 3)),sg.Input(default_text='1234', size=(20, 3)), sg.Input(default_text='2', size=(20, 3))],
-			[sg.Text('training accuracy: ', size=(30, 5), key='accuracy'), sg.Text('training dataset: ', size=(30, 1),key='training dataset')],
+			[sg.Text('training accuracy: ', size=(30, 6), key='accuracy'), sg.Text('training dataset: ', size=(30, 1),key='training dataset')],
 
 			[sg.Text('_' * 80)],
 			[sg.Text('Choose your desired dataset that you would like to predict or train on', size=(60, 1))],
@@ -259,7 +259,7 @@ async def events_loop(layouts_list):
 				elif event == 'Aux. Test':
 					if values[6] != 'Select dataset >>' and values[6][-3:] == 'csv':
 						if trained_net is not None:
-							accuracy,actual,predicted,delta,bounds = models_training.prediction(
+							accuracy,actual,predicted,delta,diff,bounds = models_training.prediction(
 																	trained_net,
 																	mode='accuracy',
 																	data_source=values[6],
@@ -271,6 +271,7 @@ async def events_loop(layouts_list):
 																					f'0/1 actual: {actual} \n' \
 																					f'0/1 prediction: {predicted} \n' \
 																					f'0/1 delta: {delta} \n' \
+																					f'0/1 diff: {diff} \n' \
 																			   		f'negative min/max range: {bounds}'
 																				)
 
