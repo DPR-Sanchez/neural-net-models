@@ -259,7 +259,7 @@ async def events_loop(layouts_list):
 				elif event == 'Aux. Test':
 					if values[6] != 'Select dataset >>' and values[6][-3:] == 'csv':
 						if trained_net is not None:
-							accuracy,actual,predicted,delta,miss,bounds = models_training.prediction(
+							accuracy,actual,predicted,delta,miss,zero_one_accuracy,bounds = models_training.prediction(
 																	trained_net,
 																	mode='accuracy',
 																	data_source=values[6],
@@ -267,11 +267,12 @@ async def events_loop(layouts_list):
 																	headers=values[8]
 																)
 							general_training_window.Element('accuracy').Update(
-																					f'training accuracy: {accuracy} \n' \
+																					f'total accuracy: {accuracy} \n' \
 																					f'0/1 actual: {actual} \n' \
 																					f'0/1 prediction: {predicted} \n' \
 																					f'0/1 delta: {delta} \n' \
 																					f'0/1 miss: {miss} \n' \
+																					f'0/1 accuracy: {zero_one_accuracy} \n' \
 																			   		f'negative min/max range: {bounds}'
 																				)
 
