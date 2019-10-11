@@ -12,5 +12,13 @@ elif [ "$1" == "gpu" ]; then
     docker build --rm -t neur:gpu -f Dockerfiles/gpu.Dockerfile . && \
     docker run --net=host --gpus all -e DISPLAY -it --rm neur:gpu
 else
-    echo "Please specify if you want the gpu or cpu version (usage: './build-neur cpu' or './build-neur gpu')"
+    # Try to automatically infer weather the user wants the GPU or CPU version
+    # Start by trying the GPU version, if the tag is not found, run the CPU version instead
+    # If both are not found, display an error message
+    echo 'Trying to run GPU version...' && docker run --net=host --gpus all -e DISPLAY -it --rm neur:gpu && exit 0 || \
+    echo 'GPU version not found, trying CPU version...' && docker run --net=host -e DISPLAY -it --rm neur:cpu && exit 0 || \
+    echo 'Could not guess the proper tag to run :( 
+Please explicity specify if you want the GPU or CPU version with
+`./start-neur cpu` OR `./start-neur gpu`'
+
 fi
