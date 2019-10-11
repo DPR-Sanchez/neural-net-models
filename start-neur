@@ -1,3 +1,16 @@
 #!/bin/bash
 xhost +
-docker run --net=host --env=DISPLAY -it --rm --volume $HOME/.Xauthority:/root/.Xauthority:rw neur
+
+if [ "$1" == "cpu" ]; then
+    # Try to run the cpu tag, if its not found, build the image and then run it
+    docker run --net=host -e DISPLAY -it --rm neur:cpu || \
+    docker build --rm -t neur:cpu -f Dockerfiles/cpu.Dockerfile . && \
+    docker run --net=host -e DISPLAY -it --rm neur:cpu
+elif [ "$1" == "gpu" ]; then
+     # Try to run the gpu tag, if its not found, build the image and then run it
+    docker run --net=host --gpus all -e DISPLAY -it --rm neur:gpu || \
+    docker build --rm -t neur:gpu -f Dockerfiles/gpu.Dockerfile . && \
+    docker run --net=host --gpus all -e DISPLAY -it --rm neur:gpu
+else
+    echo "Please specify if you want the gpu or cpu version (usage: './build-neur cpu' or './build-neur gpu')"
+fi
