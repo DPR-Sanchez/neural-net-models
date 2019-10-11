@@ -28,7 +28,7 @@ python GUI.py
 ```
 
 #### Running on Docker
-If you are on a Linux distribution that uses X Server, you can run this program
+<!-- If you are on a Linux distribution that uses X Server, you can run this program
 from within a docker container by following these steps:
 
 * Grant execution permissions to the shell scripts
@@ -42,7 +42,20 @@ chmod +x build-neur start-neur
 * Run the docker image
 ```bash
 ./start-neur
-```
+``` -->
+
+##### Linux (with X Server)
+* This repository comes with a shell script that will automatically build and run the container
+    * `./start-neur cpu` to run the CPU only version
+    * `./start-neur gpu` to run with GPU support
+* As long as only one version is installed, it will automatically infer which version you want to run
+
+#### Windows 
+* In order to run the GUI interface, you will need VcXsrv (X Server for Windows)
+    * You can install it with Chocolatey by issuing the following command: `choco install vcxsrv`
+    * Alternatively, you can download it [here](https://sourceforge.net/projects/vcxsrv/)
+* From a PowerShell prompt, run the command `.\start-neur.ps1`
+    * Depending on your execution policy, you may need to issue the command: `Unblock-File -Path .\start-neur.ps1` to allow it to be run
 
 #### Getting Started:
 ![alttext](https://github.com/DPR-Sanchez/neural-net-models/blob/dev/training_main_window_screen_shot.png)
