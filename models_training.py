@@ -92,6 +92,7 @@ def prediction(network, samples=[], labels=[], mode='', data_source='', index=Fa
 			   f'{predicted_zeros}/{predicted_ones}',\
 			   f'{zero_delta}/{one_delta}', \
 			   f'{zero_miss}/{one_miss}', \
+			   f'{(1-(zero_miss/zero_actual))* 100:.2f}%/{(1-(one_miss/one_actual))* 100:.2f}%', \
 			   f'{min_bound}/{max_bound}'
 
 	else:
