@@ -239,8 +239,8 @@ def train_model(
 	#model 7  - model 1-6 mixture of models
 	models_mixture = architectures.mixture_of_experts([sequential_net_one,parralel_network_sig_out,parralel_funnel_network_sig_out,autoscale_funnel_network_sig_out,noisy_para_seq])
 
-	# model 1
-	sub_model_8 = Linear(30) >> LeakyRelu(20) >> LeakyRelu(20) >> LeakyRelu(20) >> Tanh(20) >> Sigmoid(1)
+	# model 8
+	sub_model_8 = Linear(30) >> LeakyRelu(30) >> LeakyRelu(30) >> LeakyRelu(30) >> Tanh(30) >> Sigmoid(1)
 	leaky_tansig = Input(input_size) >> sub_model_8
 
 	net_select_dict = {
