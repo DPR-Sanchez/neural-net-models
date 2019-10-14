@@ -1,7 +1,7 @@
 class NEUR_CONSTANTS:
 	
 	def __init__(self):
-		self.NETWORK_MODELS = ('sequential 1', 'par net relu', 'par net sig', 'funnel net','scaling funnel net','noisy parallel sequential','models_mixture')
+		self.NETWORK_MODELS = ('sequential 1', 'par net relu', 'par net sig', 'funnel net','scaling funnel net','noisy parallel sequential','models_mixture','leaky tansig')
 
 		self.COST_FUNCTION_NAMES = ('Binary cross entropy',
 							   'Mean Absolute Error',
