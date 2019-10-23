@@ -17,7 +17,7 @@ import pandas as pd
 import tensorflow as tf
 
 
-def fetch_data_source(data_source:str, index:bool,dataset=False,headers=False,training=False):
+def fetch_data_source(data_source:str, index:bool,dataset=False,headers=False,training=False,aux=False):
 	# data_source should be the string path to data csv
 	#remove headers if present
 	if headers:
@@ -54,8 +54,18 @@ def fetch_data_source(data_source:str, index:bool,dataset=False,headers=False,tr
 		np.random.shuffle(training_set)
 
 	# Split lines into examples and labels
-	examples = training_set[:, 1:-1] if index else training_set[:, :-1]
-	labels = training_set[:, -1:]
+	if training or aux:
+		if index:
+			examples = training_set[:, 1:-1]
+		else:
+			examples = training_set[:, :-1]
+
+		labels = training_set[:, -1:]
+	else:
+		if index:
+			examples = training_set[:, 1:]
+		else:
+			examples = training_set
 
 	examples = preprocessing.normalize(examples,axis=0)
 
@@ -65,11 +75,11 @@ def fetch_data_source(data_source:str, index:bool,dataset=False,headers=False,tr
 		return examples,labels
 
 
-def prediction(network, samples=[], labels=[], mode='', data_source='', index=False, save_location='', headers=False, training=False):
+def prediction(network, samples=[], labels=[], mode='', data_source='', index=False, save_location='', headers=False, training=False,aux=False):
 
 	if mode == 'accuracy':
 		if data_source != '':
-			samples, labels = fetch_data_source(data_source, index, headers=headers)
+			samples, labels = fetch_data_source(data_source, index, headers=headers,aux=aux)
 
 		prediction = [1 if i > .5 else 0 for i in network.predict(samples)]
 
