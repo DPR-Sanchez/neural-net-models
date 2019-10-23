@@ -264,7 +264,8 @@ async def events_loop(layouts_list):
 																	mode='accuracy',
 																	data_source=values[6],
 																	index=values[7],
-																	headers=values[8]
+																	headers=values[8],
+																	aux=True
 																)
 							general_training_window.Element('accuracy').Update(
 																					f'total accuracy: {accuracy} \n' \
