@@ -27,24 +27,25 @@ def to_hinton(optimizer,file_name,folder_path):
 
 	hinton_file_path = f'{folder_path}{file_name}.png'
 
-	weights = []
+	weights = None
 
 	for layer in layers:
 		try:
-			weights.append(sess.run(layer.bias))
-		except Exception as e:
-			pass
-		try:
-			weights.append(sess.run(layer.weight))
+			if weights is None:
+				weights= [x for x in sess.run(layer.weight)]
+			else:
+				row = [x for x in sess.run(layer.weight)]
+				weights.append(*row)
 		except Exception as e:
 			pass
 
-	weights = np.toarray(weights)
+	weights = np.asarray(weights)
 
 	plt.style.use('ggplot')
-	plt.figure(figsize=(16, 12))
+	plt.figure(figsize=(64, 64))
 	plt.title(file_name)
 	plots.hinton(weights)
+	plt.tight_layout()
 	plt.savefig(hinton_file_path, bbox_inches='tight')
 
 def fetch_data_source(data_source:str, index:bool,dataset=False,headers=False,training=False,aux=False):
@@ -305,8 +306,8 @@ def train_model(
 	)
 
 	optimizer.train(training_examples, training_labels, validation_examples, validation_labels, batch_size=256, epochs=epochs_count)
-	hinton_name = f'hinton--src_{data_source[data_source.rfind(sep)+2:]}_mdl_{network_select}_lf_{loss_function}_epch_{epochs_count}'
-	to_hinton(optimizer,hinton_name,data_source[:data_source.rfind(sep)+1])
+	hinton_name = f'hinton--src_{data_source[data_source.rfind("/")+1:data_source.rfind(".")]}_mdl_{network_select}_lf_{loss_function}_epch_{epochs_count}'
+	to_hinton(optimizer,hinton_name,data_source[:data_source.rfind("/")+1])
 	accuracy = prediction(optimizer,validation_examples,validation_labels,'accuracy')
 
 
