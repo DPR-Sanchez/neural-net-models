@@ -24,29 +24,23 @@ import matplotlib.pyplot as plt
 def to_hinton(optimizer,file_name,folder_path):
 	sess = tensorflow_session()
 	layers = optimizer.network.layers
-
-	hinton_file_path = f'{folder_path}{file_name}.png'
-
-	weights = None
+	layer_index = 1
 
 	for layer in layers:
-		try:
-			if weights is None:
-				weights= [x for x in sess.run(layer.weight)]
-			else:
-				row = [x for x in sess.run(layer.weight)]
-				weights.append(*row)
+		try:		
+			weights= sess.run(layer.weight)
+
+			plt.style.use('ggplot')
+			plt.figure(figsize=(64, 64))
+			plt.title(f'{file_name}_layer_{layer_index}')
+			plots.hinton(weights)
+			plt.tight_layout()
+			hinton_file_path = f'{folder_path}{file_name}_layer_{layer_index}.png'
+			plt.savefig(hinton_file_path, bbox_inches='tight')
+			layer_index +=1
 		except Exception as e:
 			pass
 
-	weights = np.asarray(weights)
-
-	plt.style.use('ggplot')
-	plt.figure(figsize=(64, 64))
-	plt.title(file_name)
-	plots.hinton(weights)
-	plt.tight_layout()
-	plt.savefig(hinton_file_path, bbox_inches='tight')
 
 def fetch_data_source(data_source:str, index:bool,dataset=False,headers=False,training=False,aux=False):
 	# data_source should be the string path to data csv
