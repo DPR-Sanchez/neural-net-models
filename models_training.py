@@ -1,4 +1,5 @@
 from random import seed
+from os import sep
 import collections
 import csv
 import math
@@ -7,15 +8,44 @@ import operator
 from neupy.layers import *
 from neupy import algorithms
 from neupy import architectures
+from neupy import plots
 from sklearn.impute import SimpleImputer
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 from sklearn.utils import check_array
+from neupy.utils import tensorflow_session
 from tensorflow import keras
 import numpy as np
 import pandas as pd
 import tensorflow as tf
+import matplotlib.pyplot as plt
 
+
+def to_hinton(optimizer,file_name,folder_path):
+	sess = tensorflow_session()
+	layers = optimizer.network.layers
+
+	hinton_file_path = f'{folder_path}{file_name}.png'
+
+	weights = []
+
+	for layer in layers:
+		try:
+			weights.append(sess.run(layer.bias))
+		except Exception as e:
+			pass
+		try:
+			weights.append(sess.run(layer.weight))
+		except Exception as e:
+			pass
+
+	weights = np.toarray(weights)
+
+	plt.style.use('ggplot')
+	plt.figure(figsize=(16, 12))
+	plt.title(file_name)
+	plots.hinton(weights)
+	plt.savefig(hinton_file_path, bbox_inches='tight')
 
 def fetch_data_source(data_source:str, index:bool,dataset=False,headers=False,training=False,aux=False):
 	# data_source should be the string path to data csv
@@ -275,6 +305,8 @@ def train_model(
 	)
 
 	optimizer.train(training_examples, training_labels, validation_examples, validation_labels, batch_size=256, epochs=epochs_count)
+	hinton_name = f'hinton--src_{data_source[data_source.rfind(sep)+2:]}_mdl_{network_select}_lf_{loss_function}_epch_{epochs_count}'
+	to_hinton(optimizer,hinton_name,data_source[:data_source.rfind(sep)+1])
 	accuracy = prediction(optimizer,validation_examples,validation_labels,'accuracy')
 
 
