@@ -32,10 +32,11 @@ def to_hinton(optimizer,file_name,folder_path):
 		try:
 			weights= sess.run(layer.weight)
 
-			if layer_index  == 1 and not os.path.isdir(folder_path):
-				os.mkdir(folder_path)
+			if layer_index  == 1:
+				if not os.path.isdir(folder_path):
+					os.mkdir(folder_path)
 				weights = np.average(weights,axis=1)
-				
+
 			plt.style.use('ggplot')
 			plt.figure(figsize=(64, 64))
 			plt.title(f'{file_name}_layer_{layer_index}')
