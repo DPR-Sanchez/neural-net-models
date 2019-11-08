@@ -4,6 +4,7 @@ import collections
 import csv
 import math
 import operator
+import os
 
 from neupy.layers import *
 from neupy import algorithms
@@ -25,11 +26,16 @@ def to_hinton(optimizer,file_name,folder_path):
 	sess = tensorflow_session()
 	layers = optimizer.network.layers
 	layer_index = 1
+	folder_path = f'{folder_path}hinton{sep}'
 
 	for layer in layers:
-		try:		
+		try:
 			weights= sess.run(layer.weight)
 
+			if layer_index  == 1 and not os.path.isdir(folder_path):
+				os.mkdir(folder_path)
+				weights = np.average(weights,axis=1)
+				
 			plt.style.use('ggplot')
 			plt.figure(figsize=(64, 64))
 			plt.title(f'{file_name}_layer_{layer_index}')
