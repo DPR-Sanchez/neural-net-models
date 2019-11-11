@@ -16,11 +16,15 @@ from sklearn.model_selection import train_test_split
 from sklearn.utils import check_array
 from neupy.utils import tensorflow_session
 from tensorflow import keras
+from tensorflow import nn
 import numpy as np
 import pandas as pd
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
+class FTSwishPlus(Linear):
+	def activation_function(self, input):
+		return input*nn.sigmoid(input)
 
 def to_hinton(optimizer,file_name,folder_path):
 	sess = tensorflow_session()
@@ -285,6 +289,10 @@ def train_model(
 	sub_model_8 = Linear(30) >> LeakyRelu(30) >> LeakyRelu(30) >> LeakyRelu(30) >> Tanh(30) >> Sigmoid(1)
 	leaky_tansig = Input(input_size) >> sub_model_8
 
+	# model 9
+	sub_model_9= Linear(30) >> FTSwishPlus(30) >> FTSwishPlus(30) >> FTSwishPlus(30) >> Tanh(30) >> Sigmoid(1)
+	swish_tansig = Input(input_size) >> sub_model_9
+
 	net_select_dict = {
 		'sequential 1':sequential_net_one,
 		'par net relu':parralel_network_relu_out,
@@ -293,7 +301,8 @@ def train_model(
 		'scaling funnel net':autoscale_funnel_network_sig_out,
 		'noisy parallel sequential':noisy_para_seq,
 		'models_mixture':models_mixture,
-		'leaky tansig':leaky_tansig
+		'leaky tansig':leaky_tansig,
+		'swish_tansig':swish_tansig
 	}
 
 	network = net_select_dict[network_select]
