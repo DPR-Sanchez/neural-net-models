@@ -49,7 +49,7 @@ async def gui_layouts(layout):
 			[sg.Text('save location:', size=(15, 1), auto_size_text=False, justification='right'),
 			 sg.InputText('Select save location >>'), sg.FileSaveAs()],
 
-			[sg.Submit(), sg.Button('Load Net'), sg.Button('Save Net'), sg.Button('Back'), sg.Button('Exit')]
+			[ sg.Button('Load Net'), sg.Button('Save Net'), sg.Button('Back'), sg.Button('Exit')]
 		]
 		return general_training_layout
 
